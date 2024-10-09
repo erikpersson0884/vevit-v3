@@ -17,9 +17,9 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
 
     useEffect(() => {
         const mockData: Vev[] = [
-            { id: "1", challenger: 'Alice', challenged: 'Bob', time: '2023-10-01 10:00', reason: "f" },
-            { id: "2", challenger: 'Charlie', challenged: 'Dave', time: '2023-10-02 11:00', reason: "f" },
-            { id: "3", challenger: 'Eve', challenged: 'Frank', time: '2023-10-03 12:00', reason: "f" },
+            { id: "1", challenger: 'Alice', challenged: 'Bob', time: '2023-10-01 10:00', reason: "f", winner: null },
+            { id: "2", challenger: 'Charlie', challenged: 'Dave', time: '2023-10-02 11:00', reason: "f", winner: null },
+            { id: "3", challenger: 'Eve', challenged: 'Frank', time: '2023-10-03 12:00', reason: "f", winner: null },
         ];
         setAllVevs(mockData);
         setFilteredVevs(mockData);

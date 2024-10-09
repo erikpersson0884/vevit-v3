@@ -1,9 +1,11 @@
 import React from 'react';
 import './BookVevDiv.css';
 
+import { User } from '../../types';
+
 interface BookVevDivProps {
     showBookVev: boolean;
-    user: string;
+    user: User;
 }
 
 const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, user}) => {
@@ -17,7 +19,7 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, user}) => {
 
             <div className='inputDiv'>
                 <p>Utmanare:</p>
-                <p>{user}</p>
+                <p>{user.name}</p>
             </div>
 
 

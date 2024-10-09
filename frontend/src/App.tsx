@@ -1,15 +1,14 @@
 import React from 'react'
 import './App.css'
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import { User } from './Types'
+import { User } from './types'
 
 import Header from './Components/Header/Header'
 import Footer from './Components/Footer/Footer'
 import AuthenticationDiv from './Components/AuthenticationDiv/AuthenticationDiv';
 import BookVevDiv from './Components/BookVevDiv/BookVevDiv';
 
+import { AuthProvider } from './AuthenticationContext'
 import VevDisplay from './Components/VevDisplay/VevDisplay';
 
 
@@ -25,15 +24,19 @@ function App() {
 
     return (
         <>
-            <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
+            <AuthProvider>
+
+                <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
 
 
-            <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} />
-            <BookVevDiv showBookVev={showBookVev} user={user} />
+                <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} />
+                <BookVevDiv showBookVev={showBookVev} user={user} />
 
-            <VevDisplay user={user}/>
+                <VevDisplay user={user}/>
 
-            <Footer />
+                <Footer />
+
+            </AuthProvider>
         </>
     )
 }

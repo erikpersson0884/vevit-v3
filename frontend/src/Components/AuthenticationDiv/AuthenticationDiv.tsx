@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import './AuthenticationDiv.css';
+import { useAuth } from '../../AuthenticationContext';
+
 
 interface AuthenticationDivProps {
     showAuthenticationDiv: boolean;
 }
+
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthenticationDiv}) => {
 
@@ -15,7 +19,7 @@ const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthentication
     
     return (
         (showAuthenticationDiv) ?
-            <form className='authenticationForm popupWindow'>
+        <form className='authenticationForm popupWindow' onSubmit={(e) => e.preventDefault()}>
                 {(isLogin) ? <LoginForm toggleForm={toggleForm}/> : <RegisterForm toggleForm={toggleForm} />
         }
             </form>
@@ -28,21 +32,54 @@ export default AuthenticationDiv;
 
 
 const LoginForm = ({toggleForm} : {toggleForm: () => void}) => {
+
+    const { login } = useAuth();
+
+
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+
+    function logIn() {
+        fetch(`${VITE_API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: userName,
+                password: password
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            login(data.adminKey);
+            showAuthenticationDiv = false;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+
     return (
         <>
             <h2>Logga in</h2>
             <div className='inputDiv'>
                 <label htmlFor="username">Användarnamn:</label>
-                <input type="text" id="username"  required></input>
+                <input type="text" id="username" value={userName} onChange={(e) => setUserName(e.target.value)} required></input>
             </div>
 
 
             <div className='inputDiv'>
                 <label htmlFor="password">Lösenord:</label>
-                <input type="password" id="password" name="password" required></input>
+                <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required></input>
             </div>
 
-            <button>Log in</button>
+            <button onClick={logIn}>Log in</button>
 
             <button type="button" className='noButtonFormatting authenticationToggleLink' onClick={toggleForm}>Dont have an account? <span>Create one</span></button>
         </>
