@@ -1,11 +1,11 @@
 
 export interface Vev {
     id: string;
-    challenger: string;
-    challenged: string;
+    challenger: User;
+    challenged: User;
     time: string;
     reason: string;
-    winner: string | null;
+    winner: User | null;
 }
 
 

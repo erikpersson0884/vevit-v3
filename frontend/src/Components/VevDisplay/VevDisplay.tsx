@@ -5,7 +5,7 @@ import { Vev, User } from '../../types';
 import ToggleButton from '../ToggleButton/ToggleButton';
 
 interface VevDisplayProps {
-    user: User;
+    user: User | null;
 }
 
 const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
@@ -16,22 +16,16 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
     const [showPastVevs, setShowPastVevs] = useState(false);
 
     useEffect(() => {
-        const mockData: Vev[] = [
-            { id: "1", challenger: 'Alice', challenged: 'Bob', time: '2023-10-01 10:00', reason: "f", winner: null },
-            { id: "2", challenger: 'Charlie', challenged: 'Dave', time: '2023-10-02 11:00', reason: "f", winner: null },
-            { id: "3", challenger: 'Eve', challenged: 'Frank', time: '2023-10-03 12:00', reason: "f", winner: null },
-        ];
-        setAllVevs(mockData);
-        setFilteredVevs(mockData);
-    }, []);
-
-    useEffect(() => {
-        if (showAllVevs) {
-            setFilteredVevs(allVevs);
+        if (user) {
+            if (!showAllVevs) {
+                setFilteredVevs(allVevs.filter(vev => vev.challenger.name === user.name || vev.challenged.name === user.name));
+            } else {
+                setFilteredVevs(allVevs);
+            }
         } else {
-            setFilteredVevs(allVevs.filter(vev => vev.challenger === user.name || vev.challenged === user.name));
+            setFilteredVevs(allVevs);
         }
-    }, [showAllVevs, allVevs, user.name]);
+    }, [showAllVevs, allVevs, user]);
 
     useEffect(() => {
         if (showPastVevs) {
@@ -41,13 +35,21 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
         }
     }, [showPastVevs, allVevs]);
 
+    useEffect(() => {
+        fetch(import.meta.env.VITE_API_URL + '/vev/')
+            .then(res => res.json())
+            .then(data => {
+                setAllVevs(data);
+        })
+
+    }, []);
+
     return (
         <div className='vevDisplay'>
             <div className='filterDiv'>
-                <ToggleButton toggleFunction={() => setShowAllVevs(!showAllVevs)} option1='All Vev' option2='My Vev' />
+                {user && <ToggleButton toggleFunction={() => setShowAllVevs(!showAllVevs)} option1='All Vev' option2='My Vev' />}
                 <ToggleButton toggleFunction={() => setShowPastVevs(!showPastVevs)} option1='Kommande' option2='Passerade' />
             </div>
-
 
             <div className='vev'>
                 <h2>Utmanare</h2>
@@ -57,14 +59,13 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
 
             <hr />
 
-
             <div className='vevs'>
                 {filteredVevs.map(vev => {
                     return (
                         <div className='vev' key={vev.id}>
-                            <p>{vev.challenger}</p>
-                            <p>{vev.challenged}</p>
-                            <p>{vev.time}</p>
+                            <p>{vev.challenger.name}</p>
+                            <p>{vev.challenged.name}</p>
+                            <p>{new Date(vev.time).toLocaleString()}</p>
                         </div>
                     )
                 })}

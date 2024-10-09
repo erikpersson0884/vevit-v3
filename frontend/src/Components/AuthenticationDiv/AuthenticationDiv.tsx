@@ -5,11 +5,12 @@ import { useAuth } from '../../AuthenticationContext';
 
 interface AuthenticationDivProps {
     showAuthenticationDiv: boolean;
+    closeAuthenticationDiv: () => void;
 }
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthenticationDiv}) => {
+const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthenticationDiv, closeAuthenticationDiv}) => {
 
     const [isLogin, setIsLogin] = useState(true);
 
@@ -19,10 +20,15 @@ const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthentication
     
     return (
         (showAuthenticationDiv) ?
-        <form className='authenticationForm popupWindow' onSubmit={(e) => e.preventDefault()}>
-                {(isLogin) ? <LoginForm toggleForm={toggleForm}/> : <RegisterForm toggleForm={toggleForm} />
-        }
-            </form>
+            <div className="shadowBox" onClick={closeAuthenticationDiv}>
+                <form className='authenticationForm popupWindow' onSubmit={(e) => e.preventDefault()} onClick={(e) => e.stopPropagation()}>
+                    {(isLogin) ? 
+                        <LoginForm toggleForm={toggleForm} closeLoginForm={closeAuthenticationDiv} /> 
+                    : 
+                        <RegisterForm toggleForm={toggleForm} />
+                    }
+                </form>
+            </div>
         :
             null
     );
@@ -31,12 +37,11 @@ const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthentication
 export default AuthenticationDiv;
 
 
-const LoginForm = ({toggleForm} : {toggleForm: () => void}) => {
+const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, closeLoginForm: () => void}) => {
 
     const { login } = useAuth();
 
-
-    const [userName, setUserName] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
     function logIn() {
@@ -46,7 +51,7 @@ const LoginForm = ({toggleForm} : {toggleForm: () => void}) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userName: userName,
+                name: name,
                 password: password
             })
         })
@@ -57,8 +62,8 @@ const LoginForm = ({toggleForm} : {toggleForm: () => void}) => {
             return response.json();
         })
         .then(data => {
-            login(data.adminKey);
-            showAuthenticationDiv = false;
+            login(data.adminKey, data.user);
+            closeLoginForm(); // Close the login form after successful login
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -70,9 +75,8 @@ const LoginForm = ({toggleForm} : {toggleForm: () => void}) => {
             <h2>Logga in</h2>
             <div className='inputDiv'>
                 <label htmlFor="username">Användarnamn:</label>
-                <input type="text" id="username" value={userName} onChange={(e) => setUserName(e.target.value)} required></input>
+                <input type="text" id="username" value={name} onChange={(e) => setName(e.target.value)} required></input>
             </div>
-
 
             <div className='inputDiv'>
                 <label htmlFor="password">Lösenord:</label>
