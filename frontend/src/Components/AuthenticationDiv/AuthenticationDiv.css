@@ -1,0 +1,23 @@
+
+
+.authenticationForm {
+    position: absolute;
+    top: 5rem;
+    right: 2rem;
+}   
+
+.authenticationForm h2 {
+    font-family: 'Kaushan Script';
+    font-weight: normal;
+    text-align: center;
+
+    width: 100%;
+}
+
+.authenticationToggleLink {
+    font-size: 1rem;
+}
+
+.authenticationToggleLink span {
+    color: var(--linkColor);
+}

@@ -1,0 +1,11 @@
+{
+  "name": "vevit-v3",
+  "version": "1.0.0",
+  "description": "A aplication to book vev in the sandlådan",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd frontend && npm run dev && cd ../backend && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Erik Persson"
+}

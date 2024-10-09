@@ -1,0 +1,14 @@
+
+
+.bookVevDiv {
+    position: absolute;
+    top: 5rem;
+    right: 8.7rem;
+
+    width: 20rem;
+}
+
+.bookVevDiv textarea {
+    width: 100%;
+    min-height: 4rem;
+}

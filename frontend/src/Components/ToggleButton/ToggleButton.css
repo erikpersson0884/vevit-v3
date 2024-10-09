@@ -1,0 +1,27 @@
+
+.toggleButton {
+    background-color: none;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    width: max-content;
+    border: var(--borderColor) solid .1rem;
+    border-radius: .4rem;
+
+    overflow: hidden;
+}
+
+.toggleButton>* {
+    padding: .5rem;
+
+}
+
+.toggleButton .activeOption {
+    background: #5b5b5b;
+
+}
