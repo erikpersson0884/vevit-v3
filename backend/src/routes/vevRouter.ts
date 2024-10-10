@@ -17,6 +17,11 @@ function setVevs (vevs: Vev[]) {
     fs.writeFileSync(pathToVevsFile, JSON.stringify(vevs, null, 2));
 }
 
+function getVevFromId(id: string) {
+    let vevs = getVevs();
+    return vevs.find((vev: Vev) => vev.id === id);
+}
+
 
 // API endpoints
 
@@ -76,17 +81,17 @@ vevRouter.put('/', (req: Request, res: any) => {
     if (!isAdminKeyValid(req.body.adminKey)) return res.status(401).send('Unauthorized');
 
     const providedVev = req.body.vev;
+    const providedWinnerId = req.body.winnerId;
 
     let vevs = getVevs();
     const vevIndex = vevs.findIndex((vev: Vev) => vev.id === providedVev.id);
     if (vevIndex === -1) return res.status(404).send('Vev not found');
 
-    if (vevs[vevIndex].challenger.id !== getUserIdFromAdminKey(req.body.adminKey)) return res.status(401).send('Unauthorized');
+    if (vevs[vevIndex].challengerId !== getUserIdFromAdminKey(req.body.adminKey)) return res.status(401).send('Unauthorized');
 
-    if (providedVev.winner.id !== vevs[vevIndex].challenger.id && providedVev.winner.id !== vevs[vevIndex].challenged.id) return res.status(400).send('Winner must be either challenger or challenged');
+    if (providedVev == null && providedWinnerId !== vevs[vevIndex].challengerId && providedWinnerId !== vevs[vevIndex].challengedId) return res.status(400).send('Winner must be either challenger, challenged or null');
 
-    
-    vevs[vevIndex].winnerId = providedVev.winnerId;
+    vevs[vevIndex].winnerId = providedWinnerId;
     setVevs(vevs);
     return res.send(vevs[vevIndex]);
 });

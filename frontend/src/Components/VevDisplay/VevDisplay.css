@@ -8,7 +8,9 @@
     align-items: left;
     gap: 2rem;
 
-    width: 50%;
+    width: 60%;
+
+    transition: all 0.3s ease-in-out;
 }
 
 .filterDiv {
@@ -33,6 +35,8 @@
 }
 
 .vev {
+    text-wrap: nowrap;
+    
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -56,4 +60,26 @@
 
 .vev>*:last-of-type {
     text-align: right;
+}
+
+.vev .vevTime {
+    gap: 1rem;    
+}
+
+.vev .setWinnerSelect {
+    text-align: left;
+    width: max-content;
+    flex: 0;
+}
+
+.updateVevButton {
+    font-size: 1rem;
+}
+
+
+@media screen and (max-width: 850px) {
+    .vevDisplay {
+        width: 100%;
+        padding-inline: 3rem;
+    }
 }

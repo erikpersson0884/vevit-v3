@@ -25,8 +25,17 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,    
 };
-
 app.use(cors(corsOptions));
+
+// const corsOptions2 = {
+//     origin: 'http://erikpersson.github.io',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true,    
+// };
+// app.use(cors(corsOptions2));
+
+
 app.use(express.json());
 
 app.use('/api/auth/', authRouter)

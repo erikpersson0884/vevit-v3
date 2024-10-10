@@ -11,6 +11,8 @@
 
 .pageHeader .logo {
     height: 8rem;
+
+    transition: all 0.3s ease-in-out; 
 }
 
 .pageHeader .headerNavigation {
@@ -22,4 +24,10 @@
     position: absolute;
     top: 1rem;
     right: 2rem;
+}
+
+@media screen and (max-width: 850px) {
+    .pageHeader .logo {
+        margin-top: 4rem;
+    }
 }

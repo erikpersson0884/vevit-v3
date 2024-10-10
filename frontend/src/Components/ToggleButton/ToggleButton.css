@@ -17,11 +17,12 @@
 }
 
 .toggleButton>* {
-    padding: .5rem;
+    text-wrap: nowrap;
 
+    width: max-content;
+    padding: .5rem;
 }
 
 .toggleButton .activeOption {
     background: #5b5b5b;
-
 }
