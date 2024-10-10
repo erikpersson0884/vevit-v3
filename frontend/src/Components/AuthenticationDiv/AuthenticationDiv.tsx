@@ -25,7 +25,7 @@ const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthentication
                     {(isLogin) ? 
                         <LoginForm toggleForm={toggleForm} closeLoginForm={closeAuthenticationDiv} /> 
                     : 
-                        <RegisterForm toggleForm={toggleForm} />
+                        <RegisterForm toggleForm={toggleForm} closeForm={closeAuthenticationDiv} />
                     }
                 </form>
             </div>
@@ -90,29 +90,59 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
     )
 };
 
-const RegisterForm = ({toggleForm} : {toggleForm: () => void}) => {
+const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeForm: () => void}) => {
+    const [newUsername, setNewUsername] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+
+    function register() {
+        if (newPassword !== repeatPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        fetch(`${VITE_API_URL}/people/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                newUser: {
+                    name: newUsername,
+                    password: newPassword
+                }
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            closeForm();
+        })
+    }
+
     return (
         <>
             <h2>Register</h2>
 
             <div className='inputDiv'>
-                <label htmlFor="username">Username:</label>
-                <input type="text" id="username" name="username" required></input>
+                <label htmlFor="username">Användarnamn:</label>
+                <input type="text" id="username" name="username" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} required></input>
             </div>
 
             <div className='inputDiv'>
-                <label htmlFor="password">Password:</label>
-                <input type="password" id="password" name="password" required></input>
+                <label htmlFor="password">Lösenord:</label>
+                <input type="password" id="password" name="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required></input>
             </div>
 
             <div className='inputDiv'>
-                <label htmlFor="repeatPassword">Repeat Password:</label>
-                <input type="password" id="repeatPassword" name="password" required></input>
+                <label htmlFor="repeatPassword">Upprepa Lösenord:</label>
+                <input type="password" id="repeatPassword" name="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required></input>
             </div>
 
-            <button>Register</button>
+            <button onClick={register}>Register</button>
 
             <button type="button" className='noButtonFormatting authenticationToggleLink' onClick={toggleForm}>Already have an account? <span>Log in</span></button>
         </>
     )
-};
+}

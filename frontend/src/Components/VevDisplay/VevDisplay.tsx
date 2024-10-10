@@ -16,24 +16,20 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
     const [showPastVevs, setShowPastVevs] = useState(false);
 
     useEffect(() => {
-        if (user) {
-            if (!showAllVevs) {
-                setFilteredVevs(allVevs.filter(vev => vev.challenger.name === user.name || vev.challenged.name === user.name));
-            } else {
-                setFilteredVevs(allVevs);
-            }
-        } else {
-            setFilteredVevs(allVevs);
-        }
-    }, [showAllVevs, allVevs, user]);
+        let filtered = allVevs;
 
-    useEffect(() => {
-        if (showPastVevs) {
-            setFilteredVevs(allVevs.filter(vev => new Date(vev.time) < new Date()));
-        } else {
-            setFilteredVevs(allVevs.filter(vev => new Date(vev.time) >= new Date()));
+        if (user && !showAllVevs) {
+            filtered = filtered.filter(vev => vev.challenger.name === user.name || vev.challenged.name === user.name);
         }
-    }, [showPastVevs, allVevs]);
+
+        if (showPastVevs) {
+            filtered = filtered.filter(vev => new Date(vev.time) < new Date());
+        } else {
+            filtered = filtered.filter(vev => new Date(vev.time) >= new Date());
+        }
+
+        setFilteredVevs(filtered);
+    }, [showAllVevs, showPastVevs, allVevs, user]);
 
     useEffect(() => {
         fetch(import.meta.env.VITE_API_URL + '/vev/')
@@ -63,8 +59,16 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
                 {filteredVevs.map(vev => {
                     return (
                         <div className='vev' key={vev.id}>
-                            <p>{vev.challenger.name}</p>
-                            <p>{vev.challenged.name}</p>
+                            <p>
+                                {vev.challenger.name} {( new Date(vev.time) < new Date() && vev.winner && vev.winner.id == vev.challenger.id ) 
+                                && 
+                                <img src='images/crown.png' height={10} />}
+                            </p>
+                            <p>
+                                {vev.challenged.name} {( new Date(vev.time) < new Date() && vev.winner && vev.winner.id == vev.challenged.id) 
+                                && 
+                                <img src='images/crown.png' height={10} />}
+                            </p>
                             <p>{new Date(vev.time).toLocaleString()}</p>
                         </div>
                     )
