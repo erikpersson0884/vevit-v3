@@ -38,11 +38,11 @@ export default AuthenticationDiv;
 
 
 const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, closeLoginForm: () => void}) => {
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
 
     const { login } = useAuth();
 
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
 
     function logIn() {
         fetch(`${VITE_API_URL}/auth/login`, {
@@ -95,6 +95,8 @@ const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeFo
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
 
+    const { login } = useAuth();
+
     function register() {
         if (newPassword !== repeatPassword) {
             alert('Passwords do not match');
@@ -117,6 +119,11 @@ const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeFo
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            login(data.adminKey, data.user);
             closeForm();
         })
     }

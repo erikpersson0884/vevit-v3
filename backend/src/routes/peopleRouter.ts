@@ -2,7 +2,7 @@ import Router from 'express';
 import fs from 'fs';
 import {createRandomSuffix, pathToCredentialsFile } from '../util';
 import { User } from '../types';
-import { create } from 'domain';
+import { createAdminKey } from './authRouter';
 
 
 const peopleRouter = Router();
@@ -58,9 +58,13 @@ peopleRouter.post('/', (req, res) => {
         name: req.body.newUser.name,
         password: req.body.newUser.password,
     };
+
     people.push(newPerson);
     setPeople(people);
-    res.status(201).send(newPerson);
+
+    const adminKey = createAdminKey(newPerson);
+    delete newPerson.password;
+    res.status(201).send({adminKey: adminKey, user: newPerson});
 });
 
 

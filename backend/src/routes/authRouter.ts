@@ -23,6 +23,12 @@ function getAdminKeys() {
     }
 }
 
+export function createAdminKey(user: User): string {
+    let adminKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    saveAdminKey(adminKey, user.id);
+    return adminKey;
+}
+
 
 
 
@@ -115,8 +121,7 @@ authRouter.post('/login', (req, res) => {
   
     if (credentialsIsValid(username, password)) {
         let user: User = getUserFromCredentials(username, password);
-        let adminKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        saveAdminKey(adminKey, user.id);
+        let adminKey = createAdminKey(user);
         delete user.password;
         res.status(200).json({ adminKey: adminKey, user: user }); 
     } else {
