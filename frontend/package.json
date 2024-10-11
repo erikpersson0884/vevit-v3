@@ -5,7 +5,8 @@
   "type": "module",
   "homepage": "https://erikpersson0884.github.io/vevit-v3/",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 300",
+    "start": "vite --host 0.0.0.0 --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

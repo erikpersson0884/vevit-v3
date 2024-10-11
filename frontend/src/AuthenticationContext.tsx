@@ -17,6 +17,10 @@ export const AuthProvider = ({ children, setUser }: { children: ReactNode, setUs
 
     useEffect(() => {
         const token = localStorage.getItem('adminKey');
+        if (!token) {
+            return;
+        }
+        
         fetch(`${import.meta.env.VITE_API_URL}/auth/testAdminKey`, {
             method: 'POST',
             headers: {
