@@ -67,6 +67,8 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs }) => {
                 </p>
             </div>
 
+            <p className='vevReason'>{vev.reason}</p>
+
             {showPastVevs && !showAllVevs && (
                 <div>
                     <select

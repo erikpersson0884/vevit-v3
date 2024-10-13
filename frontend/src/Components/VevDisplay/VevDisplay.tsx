@@ -58,7 +58,8 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
                         }} 
                         initialOption={showAllVevs ? 'Alla Vev' : 'Mina Vev'} 
                         option1='Alla Vev' 
-                        option2='Mina Vev' 
+                        // option2={`${user.name}'s Vev`} 
+                        option2='Mina Vev'
                     />
                 }
                 <ToggleButton 
@@ -73,14 +74,19 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
                 />
             </div>
 
-            <div className='vev'>
+            <div className='vev vevsHeader'>
                 <h2>Utmanare</h2>
-                <h2>Utmanad</h2>
+                <h2>
+                    <a className='noAFormatting' href='https://dtek.se/'>
+                    Utmanad
+                    </a>
+                </h2>
                 <h2>Tid</h2>
+                <h2>Anledning</h2>
                 {showPastVevs && !showAllVevs && <h2>Ställ in vinnare</h2>}
             </div>
 
-            <hr />
+            {/* <hr /> */}
 
             <div className='vevs'>
                 {filteredVevs.map((vev, index) => {

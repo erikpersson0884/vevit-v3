@@ -62,7 +62,8 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, us
         })
         .then(response => {
             if (response.ok) {
-                closeBookVevDiv();
+                // closeBookVevDiv();
+                window.location.reload();
             } else {
                 throw new Error('Network response was not ok');
             }
