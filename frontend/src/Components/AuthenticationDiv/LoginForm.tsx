@@ -51,7 +51,7 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
 
             <button onClick={logIn}>Log in</button>
 
-            <button type="button" className='noButtonFormatting authenticationToggleLink' onClick={toggleForm}>Dont have an account? <span>Create one</span></button>
+            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={toggleForm}>Dont have an account? <span>Create one</span></button>
         </>
     )
 };

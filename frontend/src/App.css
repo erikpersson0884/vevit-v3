@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
-
 
 #root {
   display: flex;
@@ -14,82 +12,65 @@
   min-height: 100vh;
 }
 
-* {
-  box-sizing: border-box;
-  height: max-content;
-  padding: 0;
-  margin: 0;
+.popupWindow {
+  background: var(--backgroundVariantColor);
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+
+  position: absolute;
+  top: 5rem;
+  right: 2rem;
+
+  padding: 2rem;
+  border-radius: 1rem;
 }
 
+@media screen and (max-width: 500px) {
+  .popupWindow {
+    /* position: static; */
+    left: 0;
+    top: 1rem;
+    width: 90%;
+    margin-inline: 5%;
+  }
+}
 
-body {
-  background: var(--backgroundColor);
-  font-size: 18px;
+.popupWindow .closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.inputDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  
+  gap: 1rem;
 
   width: 100%;
+}
+
+.shadowBox {
+  background-color: var(--shadowBoxColor);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 4rem;
-}
 
-h2 {
-  font-size: 2.5rem;
-}
-
-h3 {
-  font-size: 2rem;
-}
-
-button {
-  background: var(--buttonColor);
-  color: #fff;
-
-  font-size: 1.5rem;
-
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: .5rem;
-}
-
-button:hover {
-  background: var(--buttonColorHover);
-}
-
-a {
-  color: var(--linkColor);
-
-  text-decoration: none;
-}
-
-a::after {
-  content: "";
-  display: block;
-  width: 0;
-  height: .07rem;
-  background: var(--linkColor);
-  transition: width .5s ease;
-}
-
-a:hover::after {
-  width: 100%;
-}
-
-input, select {
-  background-color: var(--inputColor) !important;
-  color: var(--textColor);
-
-  font-size: 1rem;
-
-  padding: 0.5rem;
-  border: none;
-  border-radius: .5rem;
-  box-shadow: none;
-}
-
-
-/* ----- Special Classes ----- */
+/* --- -- RESETTER STYLES -- --- */
 
 .noUlFormatting {
   list-style-type: none;
@@ -146,73 +127,4 @@ input, select {
 
 .hoverUnderSlide:hover::after {
   width: 100%;
-}
-
-
-
-
-/* ----- APP.css specific ---- */
-
-
-:root {
-  --backgroundColor: #232323;
-  --backgroundVariantColor: #323232;
-
-  --textColor: #fff;
-
-  --buttonColor: #105022;
-  --buttonColorHover: #197533;
-
-  --linkColor: #33ff00;
-  --linkColorHover: #3ec81c;
-
-  --inputColor: #515151;
-
-  --borderColor: #33ff00;
-
-  --shadowBoxColor: #00000000;
-
-}
-
-body  {
-    background-color: var(--backgroundColor);
-    color: var(--textColor);
-
-    font-size: 18px;
-    font-family: Inter;
-}
-
-.popupWindow {
-  background: var(--backgroundVariantColor);
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2rem;
-
-  padding: 2rem;
-  border-radius: 1rem;
-}
-
-.inputDiv {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  
-  gap: 1rem;
-
-  width: 100%;
-}
-
-.shadowBox {
-  background-color: var(--shadowBoxColor);
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
 }

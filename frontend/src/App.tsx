@@ -13,8 +13,6 @@ import VevDisplay from './Components/VevDisplay/VevDisplay';
 
 
 function App() {
-
-
     const [showAuthenticationDiv, setShowAuthenticationDiv] = React.useState(false);
     const [showBookVev, setShowBookVev] = React.useState(false);
 

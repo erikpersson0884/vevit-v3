@@ -1,11 +1,4 @@
 
-
-.authenticationForm {
-    position: absolute;
-    top: 5rem;
-    right: 2rem;
-}   
-
 .authenticationForm h2 {
     font-family: 'Kaushan Script';
     font-weight: normal;
@@ -14,10 +7,17 @@
     width: 100%;
 }
 
-.authenticationToggleLink {
+.authenticationForm input {
+    width: 12rem;
+}
+
+.authenticationToggleButton {
+    text-wrap: wrap;
     font-size: 1rem;
 }
 
-.authenticationToggleLink span {
+.authenticationToggleButton span {
     color: var(--linkColor);
+
+    text-wrap: nowrap;
 }

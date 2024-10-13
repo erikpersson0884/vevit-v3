@@ -1,15 +1,12 @@
 
 .toggleButton {
-    background-color: none;
-
     cursor: pointer;
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    
-    width: max-content;
+
     border: var(--borderColor) solid .1rem;
     border-radius: .4rem;
 
@@ -19,7 +16,6 @@
 .toggleButton>* {
     text-wrap: nowrap;
 
-    width: max-content;
     padding: .5rem;
 }
 

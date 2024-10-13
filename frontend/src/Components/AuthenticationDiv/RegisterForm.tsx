@@ -63,7 +63,7 @@ const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeFo
 
             <button onClick={register}>Register</button>
 
-            <button type="button" className='noButtonFormatting authenticationToggleLink' onClick={toggleForm}>Already have an account? <span>Log in</span></button>
+            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={toggleForm}>Already have an account? <span>Log in</span></button>
         </>
     )
 }

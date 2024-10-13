@@ -1,6 +1,5 @@
 
 .vevDisplay {
-    /* background-color: rgb(39, 39, 65); */
     flex: 1;
 
     display: flex;
@@ -8,9 +7,9 @@
     align-items: left;
     gap: 2rem;
 
-    width: 70%;
-
-    transition: all 0.3s ease-in-out;
+    min-width: 70%;
+    max-width: 100%;
+    margin-inline: 3rem;
 }
 
 .filterDiv {
@@ -18,19 +17,17 @@
     flex-direction: row;
     justify-content: left;
     align-items: center;
+    flex-wrap: wrap;
     gap: 2rem;
-
 }
-
 
 .vevs {
     display: flex;
     flex-direction: column;
-    /* gap: 1rem; */
 }
 
-.vev .vevsHeader {
-    border-bottom: 1px #fff solid;
+.vevsHeader {
+    border-bottom: #fff 1px solid;
 }
 
 .vev h2 {
@@ -45,10 +42,21 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: top;
+    flex-wrap: wrap;
     gap: 2rem;
 
-    padding: 1.5rem 0;
-    border-bottom: #fff solid 1px;
+    padding: 1.5rem 1rem;
+}
+
+@media screen and (max-width: 800px) {
+    .vevDisplay {
+        width: 100%;
+
+    }
+    .vev {
+        flex-direction: column;
+    }
+    
 }
 
 .vev>* {
@@ -88,10 +96,7 @@
     font-size: 1rem;
 }
 
-
-@media screen and (max-width: 850px) {
-    .vevDisplay {
-        width: 100%;
-        padding-inline: 3rem;
-    }
+.coloredVev {
+    background-color: #353535;
+    background-color: #1a1a1a;
 }

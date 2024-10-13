@@ -8,8 +8,9 @@ interface VevProps {
     vev: Vev;
     showPastVevs: boolean;
     showAllVevs: boolean;
+    className?: string;
 }
-const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs }) => {
+const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }) => {
     const [winnerId, setWinnerId] = React.useState<string | null>(vev.winner ? vev.winner.id : null);
 
     // Synchronize winnerId with vev.winner when vev changes
@@ -45,7 +46,7 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs }) => {
     }
 
     return (
-        <div className='vev'>
+        <div className={`${className} vev`}>
             <p>
                 {vev.challenger.name}
                 {(new Date(vev.time) < new Date() && vev.winner && vev.winner.id === vev.challenger.id) && (

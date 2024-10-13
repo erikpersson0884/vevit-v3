@@ -25,7 +25,12 @@ const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthentication
     return (
         (showAuthenticationDiv) ?
             <div className="shadowBox" onClick={closeAuthenticationDiv}>
-                <form className='authenticationForm popupWindow' onSubmit={(e) => e.preventDefault()} onClick={(e) => e.stopPropagation()}>
+                <form 
+                    className='authenticationForm popupWindow' 
+                    onSubmit={(e) => e.preventDefault()} 
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button className='closeButton' onClick={closeAuthenticationDiv}>X</button>
                     {(isLogin) ? 
                         <LoginForm toggleForm={toggleForm} closeLoginForm={closeAuthenticationDiv} /> 
                     : 

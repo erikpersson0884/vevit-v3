@@ -73,7 +73,13 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, us
     return (
         (showBookVev) ?
         <div className='shadowBox' onClick={closeBookVevDiv}>
-            <form className='popupWindow bookVevDiv' onSubmit={(event) => bookVev(event)} onClick={(e) => e.stopPropagation()}>
+            <form 
+                className='popupWindow bookVevDiv' 
+                onSubmit={(event) => bookVev(event)} 
+                onClick={(e) => e.stopPropagation()}
+            >
+                <button className='closeButton' onClick={closeBookVevDiv}>X</button>
+
                 {user ? (
                 <>
                     <h2>Boka vev</h2>
@@ -94,16 +100,13 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, us
                     </div>
 
                     <div className='inputDiv'>
-                        <label htmlFor="date">Datum:</label>
+                        <label htmlFor="date">Tid:</label>
                         <input 
                             type="date" 
                             id="date" 
                             onChange={(e) => setDate(new Date(e.target.value))} 
                         />
- 
-                    </div>
-                    <div className='inputDiv'>
-                        <label htmlFor="time">Tid:</label>
+
                         <input 
                             type="time" 
                             id="time" 
@@ -113,7 +116,7 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, us
                                 newTime.setHours(hours, minutes);
                                 setTime(newTime);
                             }}
-                        />  
+                        />
                     </div>
 
                     <div className='inputDiv'>
@@ -126,12 +129,10 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, us
                         ></textarea>
                     </div>
 
-
-
                     <button type="submit">Boka vev</button>
                 </>
                 ) : (
-                <h2>Du måste vara inloggad för att boka en vev</h2>
+                    <h2>Du måste vara inloggad för att boka en vev</h2>
                 )}
             </form>
         </div>

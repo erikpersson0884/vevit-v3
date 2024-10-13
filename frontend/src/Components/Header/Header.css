@@ -18,11 +18,9 @@
 .pageHeader .headerNavigation {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     gap: 1rem;
 
     position: absolute;
-    top: 1rem;
     right: 2rem;
 }
 
