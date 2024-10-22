@@ -6,7 +6,7 @@
   "homepage": "https://erikpersson0884.github.io/vevit-v3/",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 3000",
-    "start": "vite --host 0.0.0.0 --port 3000",
+    "start": "serve -s dist",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
