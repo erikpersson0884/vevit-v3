@@ -20,20 +20,13 @@ app.use(express.static('public'));
 const corsOrigins = process.env.CORS_ORIGINS?.split(',') || [];
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,    
 };
 app.use(cors(corsOptions));
 
-// const corsOptions2 = {
-//     origin: 'http://erikpersson.github.io',
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true,    
-// };
-// app.use(cors(corsOptions2));
 
 
 app.use(express.json());
@@ -47,7 +40,7 @@ app.use('/api/people/', peopleRouter)
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hello from Göken');
+    res.sendFile('index.html');
 });
 
 if (process.env.NODE_ENV !== 'test') {

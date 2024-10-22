@@ -6,6 +6,8 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
+    const [showError, setShowError] = useState(false);
+
     const { login } = useAuth();
 
     const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -22,10 +24,17 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
             })
         })
         .then(response => {
-            if (!response.ok) {
+            if (response.ok) {
+                return response.json();
+            } else if (response.status === 401) {
+                // alert('Wrong username or password');
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 4000);
+            } else {
                 throw new Error('Network response was not ok');
             }
-            return response.json();
         })
         .then(data => {
             login(data.adminKey, data.user);
@@ -48,8 +57,10 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
                 <label htmlFor="password">Lösenord:</label>
                 <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required></input>
             </div>
-
-            <button onClick={logIn}>Log in</button>
+            <div>
+                <button onClick={logIn}>Log in</button>
+                {showError ? <p className='errorMessage'>Wrong username or password</p> : null}
+            </div>
 
             <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={toggleForm}>Dont have an account? <span>Create one</span></button>
         </>

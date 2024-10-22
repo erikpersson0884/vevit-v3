@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-width: 100vw;
+            padding: 0;
+            margin: 0;
+        }
+        img {
+            width: 7rem;
+        }
+        .speakBubble {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 10rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <img src="images/hubbenrattan.gif" alt="Hubbenråttan" />
+    <div class="speakBubble" id="speakBubble">
+        <!-- Text will be inserted here -->
+    </div>
+
+    <script>
+        const messages = [
+            "Oooh no! You've are lost!",
+            "Don't worry, I'll help you find your way back!",
+            "For real, are any of us truly found?",
+            "I'm just a rat, what do I know?",
+            "But I do know that you're lost!",
+            "Just kidding, you're not lost, you're right here!",
+            "But I'm still a rat, so what do I know?",
+            "I'm just a rat, what do I know?",
+            "I know, I know! - I'm a rat!",
+            "Thats what I know",
+            "But that doesnt seem to help you...",
+            "You're still lost!",
+            "I know! I know!",
+            "I know where Hubben is!",
+            "But you're not there!",
+            "You're lost!",
+            "And I am a rat!",
+            "Oh no!",
+            "You werent going to Hubben, where were you going?",
+            "vevIT?",
+            "The site to book vev in the sandlådan?",
+            "Hmm, I think you're lost",
+            "I think I can guide you to screenIT...",
+            "But you're not there either!",
+            "You're lost!",
+            "I know! I know!",
+            "You were going to the library!",
+            "No, no, thats not right...",
+            "You were going to the library!",
+            "Nop, I just said that...",
+            "If you cannot tell, I am really tired...",
+            "sexIT has been kröking in the FRUM all night...",
+            "I just wanted that sweet sweet deliciuos soda cans in the trashcan...",
+            "But you're lost! And I am hungry!",
+            "I know! I know!",
+            "I am a rat!",
+            "No, not a rat... A Hubbenråtta!"
+        ];
+
+        let currentIndex = 0;
+
+        function displayMessage() {
+            const speakBubble = document.getElementById('speakBubble');
+            speakBubble.textContent = messages[currentIndex];
+            currentIndex = (currentIndex + 1) % messages.length;
+        }
+
+        // Display a message every 3.5 seconds
+        window.onload = () => {
+            displayMessage();
+            setInterval(displayMessage, 3000);
+        };
+    </script>
+</body>
+</html>

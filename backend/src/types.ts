@@ -8,6 +8,7 @@ export interface AdminKey {
 
 export interface User {
     id: string;
+    type?: "user" | "admin";
     name: string;
     password?: string;
 }

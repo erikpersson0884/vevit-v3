@@ -2,7 +2,7 @@ import Router from 'express';
 import fs from 'fs';
 import {createRandomSuffix, pathToCredentialsFile } from '../util';
 import { User } from '../types';
-import { createAdminKey } from './authRouter';
+import { createAdminKey, isAdminKeyValid } from './authRouter';
 
 
 const peopleRouter = Router();
@@ -47,16 +47,17 @@ peopleRouter.get('/', (req, res) => {
     res.send(people);
 });
 
-peopleRouter.post('/', (req, res) => {
+peopleRouter.post('/', (req, res) => { // Create new user
     let people = getPeople();
 
     if (!req.body.newUser.name || !req.body.newUser.password) { res.status(400).send('Missing name or password'); return;}
     for (const person of people) { if (person.name === req.body.newUser.name) { res.status(409).send(`User with username ${person.username} already exists`); return;}}
 
-    const newPerson = {
+    const newPerson: User = {
         id: createRandomSuffix(),
         name: req.body.newUser.name,
         password: req.body.newUser.password,
+        type: 'user'
     };
 
     people.push(newPerson);
@@ -66,6 +67,18 @@ peopleRouter.post('/', (req, res) => {
     delete newPerson.password;
     res.status(201).send({adminKey: adminKey, user: newPerson});
 });
+
+peopleRouter.post('/getAllUsers', (req, res) => {
+    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
+    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
+    const user = getUserFromUserId(req.body.adminKey);
+    if (!user || user.type !== 'admin') { res.status(401).send('Only admins are allowed'); return; }
+
+    let people = getPeople();
+
+    res.send(people);
+});
+
 
 
 export default peopleRouter;
