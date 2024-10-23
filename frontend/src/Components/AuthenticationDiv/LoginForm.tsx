@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../../AuthenticationContext';
+import { useAuth } from '../../Contexts/AuthenticationContext';
 
 
 const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, closeLoginForm: () => void}) => {

@@ -8,8 +8,10 @@ import Footer from './Components/Footer/Footer'
 import AuthenticationDiv from './Components/AuthenticationDiv/AuthenticationDiv';
 import BookVevDiv from './Components/BookVevDiv/BookVevDiv';
 
-import { AuthProvider } from './AuthenticationContext'
+import { AuthProvider } from './Contexts/AuthenticationContext'
 import VevDisplay from './Components/VevDisplay/VevDisplay';
+
+import { VevProvider } from './Contexts/VevContext';
 
 
 function App() {
@@ -21,17 +23,18 @@ function App() {
     return (
         <>
             <AuthProvider setUser={setUser}>
+                <VevProvider>
 
-                <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
+                    <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
 
 
-                <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} closeAuthenticationDiv={() => setShowAuthenticationDiv(false)} />
-                <BookVevDiv showBookVev={showBookVev} user={user} closeBookVevDiv={() =>setShowBookVev(false)} />
+                    <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} closeAuthenticationDiv={() => setShowAuthenticationDiv(false)} />
+                    <BookVevDiv showBookVev={showBookVev} user={user} closeBookVevDiv={() =>setShowBookVev(false)} />
 
-                <VevDisplay user={user}/>
+                    <VevDisplay user={user}/>
 
-                <Footer />
-
+                    <Footer />
+                </VevProvider>
             </AuthProvider>
         </>
     )

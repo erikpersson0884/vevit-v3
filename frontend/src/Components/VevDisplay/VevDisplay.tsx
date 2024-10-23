@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './VevDisplay.css';
 import { Vev, User } from '../../types';
+import { useVevContext} from '../../Contexts/VevContext';
 
 import VevLi from './VevLi';
 import FilterDiv from './FilterDiv';
+
 
 interface VevDisplayProps {
     user: User | null;
 }
 
 const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
-    const [allVevs, setAllVevs] = useState<Vev[]>([]);
+    const allVevs: Vev[] = useVevContext();
+
     const [filteredVevs, setFilteredVevs] = useState<Vev[]>([]);
     
     const savedShowAllVevs = localStorage.getItem('showAllVevs');
@@ -36,13 +39,7 @@ const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
         setFilteredVevs(filtered);
     }, [showAllVevs, showPastVevs, allVevs, user]);
 
-    useEffect(() => {
-        fetch(import.meta.env.VITE_API_URL + '/vev/')
-            .then(res => res.json())
-            .then(data => {
-                setAllVevs(data);
-        });
-    }, []);
+
 
     return (
         <div className='vevDisplay'>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAuth } from '../../AuthenticationContext';
+import { useAuth } from '../../Contexts/AuthenticationContext';
 
 
 interface HeaderNavigationProps {
