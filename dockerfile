@@ -4,6 +4,9 @@ FROM node:18 AS builder
 # Set the working directory for frontend
 WORKDIR /app/frontend
 
+# Set the environment for production
+ENV VITE_API_URL=/api
+
 # Copy frontend package.json and install dependencies
 COPY frontend/package*.json ./
 RUN npm install
@@ -12,8 +15,15 @@ RUN npm install
 COPY frontend .
 RUN npm run build
 
+
 # Set the working directory for backend
 WORKDIR /app/backend
+
+# Set the environment for backend
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV DEFAULT_ADMIN_NAME=admin
+ENV DEFAULT_ADMIN_PASSWORD=admin
 
 # Copy backend package.json and install dependencies
 COPY backend/package*.json ./
