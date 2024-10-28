@@ -1,15 +1,8 @@
 version: "3"
 services:
-    vevit-f: 
-        build: frontend
+    vevit:
+        build: .
         ports:
             - "3000:3000"
         environment:
-            - VITE_API_URL=http://vevit-b:3001
-    vevit-b:
-        build: backend
-        ports:
-            - "3001:3001"
-        environment:
-            - PORT=3001
-            - CORS_ORIGIN="http://localhost:3000, http://localhost:3001, https://erikpersson0884.github.io, https://fikit.chalmers.it, https://cthit.github.io, vevit-f:3000"
+            - VITE_API_URL=http://localhost:3001
