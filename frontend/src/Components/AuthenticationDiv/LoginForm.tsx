@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '../../Contexts/AuthenticationContext';
 
+interface LoginFormProps {
+    openRegisterDiv: () => void;
+    close: () => void;
+}
 
-const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, closeLoginForm: () => void}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ openRegisterDiv, close }) => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,7 +16,7 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
 
     const VITE_API_URL = import.meta.env.VITE_API_URL;
 
-    function logIn() {
+    function handleLogin() {
         fetch(`${VITE_API_URL}/auth/login`, {
             method: 'POST',
             headers: {
@@ -38,7 +42,7 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
         })
         .then(data => {
             login(data.adminKey, data.user);
-            closeLoginForm(); // Close the login form after successful login
+            close(); // Close the login form after successful login
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
@@ -46,7 +50,7 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
     }
 
     return (
-        <>
+        <form className='authenticationForm' onSubmit={handleLogin}>
             <h2>Logga in</h2>
             <div className='inputDiv'>
                 <label htmlFor="username">Användarnamn:</label>
@@ -58,12 +62,12 @@ const LoginForm = ({toggleForm, closeLoginForm} : {toggleForm: () => void, close
                 <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required></input>
             </div>
             <div>
-                <button onClick={logIn}>Log in</button>
+                <button onClick={handleLogin}>Log in</button>
                 {showError ? <p className='errorMessage'>Wrong username or password</p> : null}
             </div>
 
-            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={toggleForm}>Dont have an account? <span>Create one</span></button>
-        </>
+            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={openRegisterDiv}>Dont have an account? <span>Create one</span></button>
+        </form>
     )
 };
 

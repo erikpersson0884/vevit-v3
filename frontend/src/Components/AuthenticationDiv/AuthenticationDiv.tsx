@@ -3,6 +3,10 @@ import './AuthenticationDiv.css';
 
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import UserDiv from './UserDiv';
+import AccountDiv from './AccountDiv';
+
+import { useAuth } from '../../Contexts/AuthenticationContext';
 
 interface AuthenticationDivProps {
     showAuthenticationDiv: boolean;
@@ -10,33 +14,42 @@ interface AuthenticationDivProps {
 }
 
 const AuthenticationDiv: React.FC<AuthenticationDivProps> = ({showAuthenticationDiv, closeAuthenticationDiv}) => {
-    const [isLogin, setIsLogin] = useState(true);
+    const LoginDivContent = <LoginForm openRegisterDiv={() => setContent(RegisterDivContent)} close={closeAuthenticationDiv} />;
 
-    const toggleForm = () => {
-        setIsLogin(!isLogin);
+    const RegisterDivContent = <RegisterForm openLoginForm={() => setContent(LoginDivContent)} close={closeAuthenticationDiv} />;
+
+    const UserDivContent = <UserDiv openAccountDiv={() => setContent(AccountDivContent)} />;
+
+    const AccountDivContent = <AccountDiv openUserDiv={() => setContent(UserDivContent)} />;
+
+
+    const [content, setContent] = useState<JSX.Element>(LoginDivContent);
+
+    const setWindowContent = (newContent: JSX.Element) => {
+        setContent(newContent);
     };
 
+    const { isAuthenticated } = useAuth();
+
     React.useEffect(() => {
-        if (!showAuthenticationDiv) {
-            setIsLogin(true);
+        if (isAuthenticated) {
+            setWindowContent(UserDivContent);
+        } else {
+            setWindowContent(LoginDivContent);
         }
-    }, [showAuthenticationDiv]);
+
+    }, [showAuthenticationDiv, isAuthenticated]);
     
     return (
         (showAuthenticationDiv) ?
             <div className="shadowBox" onClick={closeAuthenticationDiv}>
-                <form 
+                <aside 
                     className='authenticationForm popupWindow' 
                     onSubmit={(e) => e.preventDefault()} 
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <button className='closeButton' onClick={closeAuthenticationDiv}>X</button>
-                    {(isLogin) ? 
-                        <LoginForm toggleForm={toggleForm} closeLoginForm={closeAuthenticationDiv} /> 
-                    : 
-                        <RegisterForm toggleForm={toggleForm} closeForm={closeAuthenticationDiv} />
-                    }
-                </form>
+                    {content}
+                </aside>
             </div>
         :
             null

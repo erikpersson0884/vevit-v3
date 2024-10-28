@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from '../../Contexts/AuthenticationContext';
 
+interface RegisterFormProps {
+    openLoginForm: () => void;
+    close: () => void;
+}
 
-const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeForm: () => void}) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ close, openLoginForm }) => {
     const [newUsername, setNewUsername] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -38,12 +42,16 @@ const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeFo
         .then(data => {
             console.log(data);
             login(data.adminKey, data.user);
-            closeForm();
+            close();
         })
     }
 
     return (
-        <>
+        <form 
+            className='authenticationForm' 
+            onSubmit={(e) => e.preventDefault()} 
+            onClick={(e) => e.stopPropagation()}
+        >
             <h2>Register</h2>
 
             <div className='inputDiv'>
@@ -63,8 +71,8 @@ const RegisterForm = ({toggleForm, closeForm} : {toggleForm: () => void, closeFo
 
             <button onClick={register}>Register</button>
 
-            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={toggleForm}>Already have an account? <span>Log in</span></button>
-        </>
+            <button type="button" className='noButtonFormatting authenticationToggleButton' onClick={openLoginForm}>Already have an account? <span>Log in</span></button>
+        </form>
     )
 }
 

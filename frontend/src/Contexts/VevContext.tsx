@@ -2,7 +2,12 @@ import React from 'react';
 
 import { Vev } from '../types';
 
-export const VevContext = React.createContext<Vev[]>([]);
+interface VevContextType {
+  allVevs: Vev[];
+  setAllVevs: React.Dispatch<React.SetStateAction<Vev[]>>;
+}
+
+export const VevContext = React.createContext<VevContextType | undefined>(undefined);
 
 interface VevProviderProps {
   children: React.ReactNode;
@@ -20,7 +25,7 @@ export const VevProvider: React.FC<VevProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <VevContext.Provider value={allVevs}>
+    <VevContext.Provider value={{ allVevs, setAllVevs}}>
       {children}
     </VevContext.Provider>
   );

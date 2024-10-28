@@ -1,18 +1,21 @@
 import React from 'react';
 import './BookVevDiv.css';
 
+import { useAuth } from '../../Contexts/AuthenticationContext';
+
 import { User } from '../../types';
 
 interface BookVevDivProps {
     showBookVev: boolean;
     closeBookVevDiv: () => void;
-    user: User | null;
 }
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 
-const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv, user}) => {
+const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) => {
+
+    const { user } = useAuth();
 
     const [allUsers, setAllUsers] = React.useState<User[]>([]);
 

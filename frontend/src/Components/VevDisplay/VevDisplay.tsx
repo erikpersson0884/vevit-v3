@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './VevDisplay.css';
-import { Vev, User } from '../../types';
+import { Vev } from '../../types';
 import { useVevContext} from '../../Contexts/VevContext';
+import { useAuth } from '../../Contexts/AuthenticationContext';
 
 import VevLi from './VevLi';
 import FilterDiv from './FilterDiv';
 
 
-interface VevDisplayProps {
-    user: User | null;
-}
-
-const VevDisplay: React.FC<VevDisplayProps> = ({ user }) => {
-    const allVevs: Vev[] = useVevContext();
+const VevDisplay: React.FC = () => {
+    const {user} = useAuth();
+    const {allVevs}: {allVevs: Vev[]} = useVevContext();
 
     const [filteredVevs, setFilteredVevs] = useState<Vev[]>([]);
     

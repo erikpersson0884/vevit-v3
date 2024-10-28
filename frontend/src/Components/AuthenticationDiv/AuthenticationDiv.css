@@ -1,4 +1,8 @@
-
+.authenticationForm {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
 .authenticationForm h2 {
     font-family: 'Kaushan Script';
     font-weight: normal;
@@ -20,4 +24,10 @@
     color: var(--linkColor);
 
     text-wrap: nowrap;
+}
+
+.userDiv .userStatsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }

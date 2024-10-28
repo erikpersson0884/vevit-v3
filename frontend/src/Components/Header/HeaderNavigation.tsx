@@ -10,17 +10,12 @@ interface HeaderNavigationProps {
 
 const HeaderNavigation: React.FC<HeaderNavigationProps> = ({openBookVev, openLogin}) => {
 
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     return (
         <aside className="headerNavigation">
             <button onClick={openBookVev}>Boka vev</button>
-            {
-                (isAuthenticated) ?
-                    <button onClick={logout}>Logga ut</button>
-                :
-                    <button onClick={openLogin}>Logga in</button>
-            }
+            <button onClick={openLogin}>{(isAuthenticated) ? "Konto" : "Logga in"}</button>
         </aside>
     );
 }

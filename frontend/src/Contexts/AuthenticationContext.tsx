@@ -4,6 +4,8 @@ import { User } from '../types';
 
 interface AuthContextType {
     isAuthenticated: boolean;
+    user: User | null;
+    setUser: (user: User) => void;
     login: (token: string, user: User) => void;
     logout: () => void;
 }
@@ -12,8 +14,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Create a provider component
-export const AuthProvider = ({ children, setUser }: { children: ReactNode, setUser: (user: User | null) => void }) => {
+export const AuthProvider = ({ children }: { children: ReactNode}) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem('adminKey');
@@ -61,7 +64,7 @@ export const AuthProvider = ({ children, setUser }: { children: ReactNode, setUs
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, setUser, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
