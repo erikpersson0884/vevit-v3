@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static('dist'));
 
 const corsOptions = {
     origin: '*',
@@ -23,8 +23,6 @@ const corsOptions = {
     credentials: true,    
 };
 app.use(cors(corsOptions));
-
-
 
 app.use(express.json());
 
@@ -38,8 +36,12 @@ import path from 'path';
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-app.get('', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
+app.get('/api', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '../public', 'api.html'));
 });
 
 
