@@ -116,6 +116,8 @@ function removeUnvalidAdminKeys() {
 
 authRouter.post('/login', (req, res) => {
     removeUnvalidAdminKeys();
+    if (!req.body.name || !req.body.password) { res.status(400).json({ error: 'Missing name or password' }); return; }
+
     const username = req.body.name; 
     const password = req.body.password;
   
@@ -124,8 +126,10 @@ authRouter.post('/login', (req, res) => {
         let adminKey = createAdminKey(user);
         delete user.password;
         res.status(200).json({ adminKey: adminKey, user: user }); 
+        return;
     } else {
         res.status(401).json({ error: 'Invalid credentials' });
+        return;
     }
 });
 

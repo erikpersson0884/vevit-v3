@@ -2,7 +2,7 @@ import Router from 'express';
 import fs from 'fs';
 import {createRandomSuffix, pathToCredentialsFile } from '../util';
 import { User } from '../types';
-import { createAdminKey, isAdminKeyValid } from './authRouter';
+import { createAdminKey, getUserFromAdminKey, isAdminKeyValid } from './authRouter';
 
 
 const peopleRouter = Router();
@@ -50,7 +50,7 @@ peopleRouter.get('/', (req, res) => {
 peopleRouter.post('/', (req, res) => { // Create new user
     let people = getPeople();
 
-    if (!req.body.newUser.name || !req.body.newUser.password) { res.status(400).send('Missing name or password'); return;}
+    if (!req.body.newUser.name || !req.body.newUser.password) { res.status(400).send('Missing name or password'); return; }
     for (const person of people) { if (person.name === req.body.newUser.name) { res.status(409).send(`User with username ${person.username} already exists`); return;}}
 
     const newPerson: User = {
@@ -67,6 +67,29 @@ peopleRouter.post('/', (req, res) => { // Create new user
     delete newPerson.password;
     res.status(201).send({adminKey: adminKey, user: newPerson});
 });
+
+peopleRouter.put('/', (req, res) => { // Update user
+    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
+    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
+
+    const providedUser = getUserFromAdminKey(req.body.adminKey);
+    if (!providedUser) { res.status(404).send('User with that adminKey was not found'); return; }
+
+    let people = getPeople();
+    const foundPerson = people.find((person: User) => person.id === providedUser.id);
+    if (!foundPerson) { res.status(404).send('User not found'); return; }
+
+    foundPerson.name = providedUser.name || foundPerson.name;
+    foundPerson.password = providedUser.password || foundPerson.password;
+
+    setPeople(people);
+
+    delete foundPerson.password;
+
+    res.status(200).send(foundPerson);
+});
+
+
 
 peopleRouter.post('/getAllUsers', (req, res) => {
     if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }

@@ -14,10 +14,7 @@ dotenv.config();
 
 const app = express();
 
-
-
 app.use(express.static('public'));
-const corsOrigins = process.env.CORS_ORIGINS?.split(',') || [];
 
 const corsOptions = {
     origin: '*',
@@ -37,14 +34,18 @@ app.use('/api/people/', peopleRouter)
 
 
 
+import path from 'path';
 
+app.use(express.static(path.join(__dirname, '../dist')));
 
-app.get('/', (req: Request, res: Response) => {
-    res.sendFile('index.html');
+app.get('', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
+
+
 if (process.env.NODE_ENV !== 'test') {
-    const PORT = process.env.PORT || 3001;
+    const PORT = process.env.PORT || 3005;
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });
