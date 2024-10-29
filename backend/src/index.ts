@@ -34,10 +34,10 @@ app.use('/api/people/', peopleRouter)
 
 import path from 'path';
 
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
 
 app.get('/api', (req: Request, res: Response) => {
