@@ -30,7 +30,7 @@ COPY backend/package*.json ./
 RUN npm install
 
 # Copy the frontend build output into the backend directory
-RUN cp -r /app/frontend/dist /app/backend/dist
+RUN cp -r /app/frontend/dist /app/backend/frontend
 
 # Copy the rest of the backend source code
 COPY backend .

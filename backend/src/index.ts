@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(express.static('dist'));
+app.use(express.static('frontend'));
 
 const corsOptions = {
     origin: '*',
@@ -47,7 +47,7 @@ app.get('/api', (req: Request, res: Response) => {
 
 
 if (process.env.NODE_ENV !== 'test') {
-    const PORT = process.env.PORT || 3005;
+    const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });
