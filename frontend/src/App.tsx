@@ -9,7 +9,12 @@ import BookVevDiv from './Components/BookVevDiv/BookVevDiv';
 import { AuthProvider } from './Contexts/AuthenticationContext'
 import VevDisplay from './Components/VevDisplay/VevDisplay';
 
+import AdminPage from './Components/AdminPage/AdminPage';
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { VevProvider } from './Contexts/VevContext';
+import { PeopleProvider } from './Contexts/PeopleContext';
 
 
 function App() {
@@ -20,16 +25,23 @@ function App() {
         <>
             <AuthProvider>
                 <VevProvider>
+                    <PeopleProvider>
 
-                    <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
+                        <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
 
 
-                    <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} closeAuthenticationDiv={() => setShowAuthenticationDiv(false)} />
-                    <BookVevDiv showBookVev={showBookVev} closeBookVevDiv={() =>setShowBookVev(false)} />
+                        <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} closeAuthenticationDiv={() => setShowAuthenticationDiv(false)} />
+                        <BookVevDiv showBookVev={showBookVev} closeBookVevDiv={() =>setShowBookVev(false)} />
 
-                    <VevDisplay/>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<VevDisplay />} />
+                                <Route path="/adminPage" element={<AdminPage />} />
+                            </Routes>
+                        </BrowserRouter>
 
-                    <Footer />
+                        <Footer />
+                    </PeopleProvider>
                 </VevProvider>
             </AuthProvider>
         </>

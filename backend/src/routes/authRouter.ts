@@ -43,16 +43,17 @@ function credentialsIsValid(username: string, password:string) {
     return false;
 }
 
-export function getUserFromAdminKey(providedAdminKey: string): User | null {
+export function getUserFromAdminKey(providedAdminKey: string): User {
     let adminKeys = getAdminKeys();
 
     for (const keyToTest of adminKeys) {
         if (keyToTest.key === providedAdminKey) {
-            return getUserFromUserId(keyToTest.userId);
+            const user = getUserFromUserId(keyToTest.userId);
+            if (user) return user;
         }
     }
 
-    return null;
+    throw new Error('User not found');
 }
 
 export function getUserIdFromAdminKey(providedAdminKey: string): string | null {

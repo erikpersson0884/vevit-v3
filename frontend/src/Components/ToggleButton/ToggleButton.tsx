@@ -2,13 +2,14 @@ import React from "react";
 import './ToggleButton.css';
 
 interface ToggleButtonProps {
+    className?: string;
     toggleFunction: () => void;
     initialOption?: string;
     option1: string;
     option2: string;
 }
 
-const ToggleButton: React.FC<ToggleButtonProps> = ({ toggleFunction, initialOption, option1, option2 }) => {
+const ToggleButton: React.FC<ToggleButtonProps> = ({ className="", toggleFunction, initialOption, option1, option2 }) => {
 
     if (initialOption !== option1 && initialOption !== option2) {
         throw new Error('initialOption must be either option1 or option2');
@@ -22,7 +23,7 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ toggleFunction, initialOpti
     const [isOption1, setIsOption1] = React.useState<boolean>(initialOption === option1 ? true : false);
 
     return (
-        <div className="toggleButton" onClick={toggle}>
+        <div className={`${className} toggleButton`} onClick={toggle}>
             <div className={isOption1? "activeOption" : ""}>
                 {option1}
             </div>

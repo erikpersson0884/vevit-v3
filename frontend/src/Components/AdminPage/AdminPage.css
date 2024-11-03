@@ -1,0 +1,42 @@
+
+
+.adminPage {
+    /* background-color: grey; */
+
+    min-width: 80%;
+}
+
+.adminPage .toggleButton {
+    width: max-content;
+    border-bottom: none;
+    border-radius: .5rem .5rem 0 0;
+}
+
+.adminPage .contextList {
+    background-color: rgb(52, 52, 52);
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-height: 3rem;
+}
+
+.adminPage .listItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+
+    padding: 1rem 1rem;
+}
+
+.adminPage li>* {
+    flex: 1;
+}
+
+.adminPage .dark {
+    background-color: rgb(16, 16, 16);
+}
+

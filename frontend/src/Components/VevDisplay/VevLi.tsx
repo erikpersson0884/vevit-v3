@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Vev } from '../../types';
+import { User, Vev } from '../../types';
 
 interface VevProps {
     vev: Vev;
@@ -45,17 +45,27 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }
         });
     }
 
+    function vevIsInPast() {
+        return new Date(vev.time) < new Date();
+    }
+
+    function userIsWinner(user: User): boolean {
+        return vev.winner ? vev.winner.id === user.id : false;
+    }
+
     return (
         <div className={`${className} vev`}>
             <p>
-                {vev.challenger.name}
-                {(new Date(vev.time) < new Date() && vev.winner && vev.winner.id === vev.challenger.id) && (
+                {vev.challenger? vev.challenger.name : 'Deleted User'}
+
+                {(vevIsInPast() && userIsWinner(vev.challenger)) && (
                     <img src='images/crown.png' height={10} />
                 )}
             </p>
             <p>
-                {vev.challenged.name}
-                {(new Date(vev.time) < new Date() && vev.winner && vev.winner.id === vev.challenged.id) && (
+                {vev.challenged ? vev.challenged.name : 'Deleted User'}
+
+                {(vevIsInPast() && userIsWinner(vev.challenged)) && (
                     <img src='images/crown.png' height={10} />
                 )}
             </p>
@@ -70,37 +80,64 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }
 
             <p className='vevReason'>{vev.reason}</p>
 
-            {showPastVevs && !showAllVevs && (
-                <div>
-                    <select
-                        className='setWinnerSelect'
-                        value={winnerId ? winnerId : ''}
-                        onChange={(e) => {
-                            const selectedValue = e.target.value;
-                            setWinnerId(selectedValue ? selectedValue : null);
-                        }}
-                    >
-                        <option key='challangerWinner' value=''>
-                            Ingen
-                        </option>
-                        <option key='winner' value={vev.challenger.id}>
-                            {vev.challenger.name}
-                        </option>
-                        <option key='challengedWinner' value={vev.challenged.id}>
-                            {vev.challenged.name}
-                        </option>
-                    </select>
-                    {(vev.winner === null && winnerId !== null) ||
-                    (vev.winner && vev.winner.id !== winnerId) ? (
-                        <button className='updateVevButton' onClick={handleUpdateVev}>
-                            Uppdatera
-                        </button>
-                    ) : null}
-                </div>
-            )}
+            <WinnerElement 
+                vev={vev}
+                showPastVevs={showPastVevs}
+                showAllVevs={showAllVevs}
+                winnerId={winnerId}
+                setWinnerId={setWinnerId}
+                handleUpdateVev={handleUpdateVev}
+            />
         </div>
     );
 };
 
 
 export default VevLi;
+
+
+interface WinnerElementProps {
+    vev: Vev;
+    showPastVevs: boolean;
+    showAllVevs: boolean;
+    winnerId: string | null;
+    setWinnerId: React.Dispatch<React.SetStateAction<string | null>>;
+    handleUpdateVev: () => void;
+}
+
+const WinnerElement: React.FC<WinnerElementProps> = ({ vev, showPastVevs, showAllVevs, winnerId, setWinnerId, handleUpdateVev }) => {
+    return (
+        showPastVevs && !showAllVevs ?
+
+        <div>
+            <select
+                className='setWinnerSelect'
+                value={winnerId ? winnerId : ''}
+                onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    setWinnerId(selectedValue ? selectedValue : null);
+                }}
+            >
+                <option key='challangerWinner' value=''>
+                    Ingen
+                </option>
+                <option key='winner' value={vev.challenger.id}>
+                    {vev.challenger.name}
+                </option>
+                <option key='challengedWinner' value={vev.challenged.id}>
+                    {vev.challenged.name}
+                </option>
+            </select>
+
+            {(vev.winner === null && winnerId !== null) ||
+            (vev.winner && vev.winner.id !== winnerId) ? (
+                <button className='updateVevButton' onClick={handleUpdateVev}>
+                    Uppdatera
+                </button>
+            ) : null}
+        </div>
+
+        : 
+        null
+    );
+};

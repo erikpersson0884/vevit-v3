@@ -8,7 +8,7 @@ export interface AdminKey {
 
 export interface User {
     id: string;
-    type?: "user" | "admin";
+    type?: "user" | "admin" | "deleted";
     name: string;
     password?: string;
 }
@@ -19,16 +19,16 @@ export interface Vev {
     challengedId: string;
     time: string;
     reason: string;
-    winnerId: string | null;
+    winnerId?: string | null;
 }
 
 export interface VevDTO {
     id: string;
-    challenger: UserDTO;
-    challenged: UserDTO;
+    challenger: UserDTO | string;
+    challenged: UserDTO | string;
     time: string;
     reason: string;
-    winner: UserDTO | null;
+    winner?: UserDTO | null;
 }
 
 export interface UserDTO {

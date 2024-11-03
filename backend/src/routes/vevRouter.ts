@@ -29,24 +29,23 @@ vevRouter.get('/', (req, res) => {
     let vevs = getVevs();
 
     let returnVevs: VevDTO[] = vevs.map((vev: Vev) => {
-        const challenger = getUserFromUserId(vev.challengerId) as User;
-        const challenged = getUserFromUserId(vev.challengedId) as User;
-        const winner = vev.winnerId ? (getUserFromUserId(vev.winnerId) as User) : null;
+        const challenger = getUserFromUserId(vev.challengerId);
+        const challenged = getUserFromUserId(vev.challengedId);
+        const winner = vev.winnerId ? getUserFromUserId(vev.winnerId) : null;
 
         // Remove password from UserDTO
-        delete challenger.password;
-        delete challenged.password;
-        if (winner) {
-            delete winner.password;
-        }
+        [challenger, challenged, winner].forEach((user: User | null) => {
+            if (user) delete user.password;
+        });
+
 
         return {
             id: vev.id,
-            challenger,
-            challenged,
+            challenger: challenger,
+            challenged: challenged,
             time: vev.time,
             reason: vev.reason,
-            winner,
+            winner: winner,
         };
     });
 
@@ -68,7 +67,6 @@ vevRouter.post('/', (req: Request, res: any) => {
         challengedId: providedVev.challenged.id,
         time: providedVev.time,
         reason: providedVev.reason,
-        winnerId: null,
     };
 
     let vevs = getVevs();
