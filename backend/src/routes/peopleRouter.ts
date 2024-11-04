@@ -1,8 +1,8 @@
-import Router from 'express';
+import Router, { Request, Response } from 'express';
 import fs from 'fs';
 import {createRandomSuffix, pathToCredentialsFile } from '../util';
 import { User } from '../types';
-import { createAdminKey, getUserFromAdminKey, isAdminKeyValid } from './authRouter';
+import {verifyToken} from './authMiddleware';
 
 
 const peopleRouter = Router();
@@ -45,7 +45,8 @@ peopleRouter.get('/', (req, res) => {
     res.send(people);
 });
 
-peopleRouter.post('/', (req, res) => { // Create new user
+
+peopleRouter.post('/', verifyToken, (req: Request, res: Response) => { // Create new user
     let people = getPeople();
 
     if (!req.body.newUser.name || !req.body.newUser.password) { res.status(400).send('Missing name or password'); return; }
@@ -61,38 +62,37 @@ peopleRouter.post('/', (req, res) => { // Create new user
     people.push(newPerson);
     setPeople(people);
 
-    const adminKey = createAdminKey(newPerson);
-    delete newPerson.password;
-    res.status(201).send({adminKey: adminKey, user: newPerson});
+    res.status(201).send({user: newPerson});
 });
 
-peopleRouter.put('/', (req, res) => { // Update user
-    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
-    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
+peopleRouter.put('/', verifyToken, (req: Request, res: Response) => { // Update user
+    const user: User = req.user as User; // Ensure req.user is populated by verifyToken
+    const newUserInfo = req.body.user;
+    if (!newUserInfo) { res.status(400).send('No user information was provided'); return; }
 
-    const providedUser = getUserFromAdminKey(req.body.adminKey);
-    if (!providedUser) { res.status(404).send('User with that adminKey was not found'); return; }
+
+    if (user.id !== newUserInfo.id && user.type !== 'admin') { res.status(401).send('You can only update your own user information'); return; }
 
     let people = getPeople();
-    const foundPerson = people.find((person: User) => person.id === providedUser.id);
-    if (!foundPerson) { res.status(404).send('User not found'); return; }
+    const foundPerson = people.find((person: User) => person.id === newUserInfo.id); // Find the user by ID
 
-    foundPerson.name = providedUser.name || foundPerson.name;
-    foundPerson.password = providedUser.password || foundPerson.password;
+    if (!foundPerson) { 
+        res.status(404).send('User not found'); 
+        return;
+    }
+
+    foundPerson.name = newUserInfo.name || foundPerson.name;
+    foundPerson.password = newUserInfo.password || foundPerson.password;
 
     setPeople(people);
 
     delete foundPerson.password;
-
-    res.status(200).send(foundPerson);
+    res.status(200).send({user: foundPerson});
 });
 
-peopleRouter.delete('/', (req, res) => { // Delete user
-    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
-    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
 
-    const user = getUserFromAdminKey(req.body.adminKey);
-    if (!user) { res.status(404).send('User with that adminKey was not found'); return; }
+peopleRouter.delete('/', verifyToken, (req: Request, res: Response) => { // Delete user
+    const user: User = req.user as User;
     if (user.type !== 'admin') { res.status(401).send('Only admins are allowed to delete users'); return; }
 
     let people = getPeople();
@@ -108,11 +108,8 @@ peopleRouter.delete('/', (req, res) => { // Delete user
 });
 
 
-
-peopleRouter.post('/getAllUsers', (req, res) => {
-    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
-    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
-    const user = getUserFromUserId(req.body.adminKey);
+peopleRouter.post('/getAllUsers', verifyToken, (req: Request, res) => {
+    const user: User = req.user as User;
     if (!user || user.type !== 'admin') { res.status(401).send('Only admins are allowed'); return; }
 
     let people = getPeople();
@@ -120,11 +117,9 @@ peopleRouter.post('/getAllUsers', (req, res) => {
     res.send(people);
 });
 
-peopleRouter.put('/resetPassword', (req, res) => {
-    if (!req.body.adminKey) { res.status(401).send('AdminKey missing'); return; }
-    if (!isAdminKeyValid(req.body.adminKey)) { res.status(401).send('Invalid adminkey'); return; }
+peopleRouter.put('/resetPassword', verifyToken, (req: Request, res) => {
+    const user: User = req.user as User;
 
-    const user: User = getUserFromAdminKey(req.body.adminKey);
     if (!(user.type === 'admin')) { res.status(401).send('Only admins are allowed to reset passwords'); return; }
 
     const userId = req.body.userId;

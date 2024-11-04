@@ -7,12 +7,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
+if (!process.env.JWT_SECRET_KEY) {
+    console.error('JWT_SECRET_KEY is not set');
+    process.exit(1);
+}
+
+export const SECRET_KEY: string = process.env.JWT_SECRET_KEY;
+
+
 const dataFolderPath:string = "data/";
 export const pathToCredentialsFile: string = dataFolderPath + "people.json";
-export const pathToAdminkeysFile: string = dataFolderPath + "adminKeys.json";
-
 export const pathToVevsFile: string = dataFolderPath + "vevs.json";
-
 
 export const adminKeysLifeTime = 10 * 24 * 60 * 60 * 1000; // 10 days in milliseconds
 
@@ -32,7 +37,7 @@ export function initiateDataFiles() {
         }
     });
 
-    const files = [pathToAdminkeysFile, pathToVevsFile];
+    const files = [pathToVevsFile];
 
     files.forEach((file: string) => {
         if (!fs.existsSync(file)) {

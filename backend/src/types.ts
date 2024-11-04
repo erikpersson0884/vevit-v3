@@ -1,5 +1,3 @@
-
-
 export interface AdminKey {
     key: string;
     userId: string;
@@ -35,3 +33,14 @@ export interface UserDTO {
     id: string;
     name: string;
 }
+
+export interface JwtPayload extends User {
+    id: string;
+}
+
+declare module 'express' {
+    export interface Request {
+        user?: User;
+    }
+}
+

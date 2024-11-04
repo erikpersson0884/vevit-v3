@@ -14,47 +14,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ openRegisterDiv, close }) => {
 
     const { login } = useAuth();
 
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
-
-    function handleLogin() {
-        fetch(`${VITE_API_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: name,
-                password: password
-            })
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else if (response.status === 401) {
-                // alert('Wrong username or password');
-                setShowError(true);
-                setTimeout(() => {
-                    setShowError(false);
-                }, 4000);
-            } else {
-                throw new Error('Network response was not ok');
-            }
-        })
-        .then(data => {
-            login(data.adminKey, data.user);
-            close(); // Close the login form after successful login
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setShowError(false);
+        const success = await login(name, password);
+        if (!success) {
+            setShowError(true);
+            setTimeout(() => {
+                setShowError(false);
+            }, 4000);
+        } else {
+            close();
+        }
     }
-
+    
     return (
         <form className='authenticationForm' onSubmit={handleLogin}>
             <h2>Logga in</h2>
+            <div className='inputDiv'></div>
+
             <div className='inputDiv'>
-                <label htmlFor="username">Användarnamn:</label>
-                <input type="text" id="username" value={name} onChange={(e) => setName(e.target.value)} required></input>
+                <label htmlFor="name">Användarnamn:</label>
+                <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} required></input>
             </div>
 
             <div className='inputDiv'>

@@ -1,15 +1,13 @@
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-
 import { User } from '../types';
 
 interface AuthContextType {
     isAuthenticated: boolean;
     user: User | null;
     setUser: (user: User) => void;
-    login: (token: string, user: User) => void;
+    login: (username: string, password: string) => Promise<boolean>;
     logout: () => void;
 }
-
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -19,23 +17,21 @@ export const AuthProvider = ({ children }: { children: ReactNode}) => {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem('adminKey');
+        const token = localStorage.getItem('token');
         if (!token) {
             return;
         }
-        
-        fetch(`${import.meta.env.VITE_API_URL}/auth/testAdminKey`, {
+        // If a token is present, validate it
+        fetch(`/api/auth/validate`, {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                adminKey: token
-            })
+            }
         })
         .then(response => {
-            if (!response.ok) {
-                localStorage.removeItem('adminKey');
+            if (response.status !== 200) {
+                localStorage.removeItem('token');
                 throw new Error('Network response was not ok');
             }
             return response.json();
@@ -44,20 +40,39 @@ export const AuthProvider = ({ children }: { children: ReactNode}) => {
             setIsAuthenticated(true);
             setUser(data.user);
         })
-
-        if (token) {
-        }
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }, []);
 
-    const login = (token: string, user: User) => {
-        localStorage.setItem('adminKey', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
-        setIsAuthenticated(true);
-    };
+    async function login(username: string, password: string): Promise<boolean> {
+        try {
+            const response = await fetch(`/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            setUser(data.user);
+            setIsAuthenticated(true);
+            return true;
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            return false;
+        }
+    }
 
     const logout = () => {
-        localStorage.removeItem('adminKey');
+        localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
         setIsAuthenticated(false);

@@ -1,7 +1,4 @@
-
-
 import React from 'react';
-
 import { User, Vev } from '../../types';
 
 interface VevProps {
@@ -24,19 +21,20 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }
             return;
         }
 
-        fetch(import.meta.env.VITE_API_URL + '/vev/', {
+        fetch('/api/vev/', {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
             body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
-                vev: vev,
-                winnerId: winnerId,
+            adminKey: localStorage.getItem('adminKey'),
+            vev: vev,
+            winnerId: winnerId,
             }),
         })
         .then((response) => {
-            if (response.ok) {
+            if (response.status === 200) {
                 window.location.reload();
             }
         })

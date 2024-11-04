@@ -12,10 +12,19 @@ const UserDiv: React.FC<UserDivProps> = ({openAccountDiv}) => {
     const { isAuthenticated, user, logout } = useAuth();
     const { allVevs } = useVevContext();
 
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            console.log(isAuthenticated, user);
+        }, 1000);
 
-    let userStats;
-    user? userStats = getUserStats(user, allVevs) : userStats = {numberOfVevs: 0, numberOfVevsWon: 0, numberOfVevsLost: 0, winPercentage: 0};
+        return () => clearInterval(interval);
+    }, [isAuthenticated, user]);
 
+
+    let userStats = user? 
+        getUserStats(user, allVevs) 
+    : 
+        {numberOfVevs: 0, numberOfVevsWon: 0, numberOfVevsLost: 0, winPercentage: 0};
 
     return (
         isAuthenticated && user ?

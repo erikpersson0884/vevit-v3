@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../Contexts/AuthenticationContext';
 
+
 interface RegisterFormProps {
     openLoginForm: () => void;
     close: () => void;
@@ -12,7 +13,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ close, openLoginForm }) => 
     const [repeatPassword, setRepeatPassword] = useState('');
 
     const { login } = useAuth();
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 
     function register() {
@@ -21,29 +21,27 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ close, openLoginForm }) => 
             return;
         }
 
-        fetch(`${VITE_API_URL}/people/`, {
+        fetch(`/api/people/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                newUser: {
-                    name: newUsername,
-                    password: newPassword
-                }
+            newUser: {
+                name: newUsername,
+                password: newPassword
+            }
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             console.log(data);
             login(data.adminKey, data.user);
             close();
         })
+        .catch(error => {
+            console.error('There was an error!', error);
+        });
     }
 
     return (

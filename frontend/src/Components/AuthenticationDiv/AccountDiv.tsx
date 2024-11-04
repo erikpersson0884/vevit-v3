@@ -11,35 +11,41 @@ const AccountDiv: React.FC<AccountDivProps> = ({ openUserDiv }) => {
     const [newUsername, setNewUsername] = React.useState(user?.name);
     const [newPassword, setNewPassword] = React.useState('');
 
-    const VITE_API_URL = import.meta.env.VITE_API_URL;
 
     function updateUser() {
-        fetch(`${VITE_API_URL}/people/`, {
+        if (!user) {
+            alert('No user is signed in');
+            return;
+        }
+
+        fetch(`/api/people`, {
             method: 'PUT',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
                 user: {
+                    id: user.id,
                     name: newUsername,
                     password: newPassword
                 }
             })
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setUser(data.user);
-                openUserDiv();
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+        .then(response => {
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setUser(data.user);
+            openUserDiv();
+            console.log(data.user);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     }
 
     return (

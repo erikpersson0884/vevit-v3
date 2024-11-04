@@ -1,10 +1,9 @@
 import Router, { Request, Response } from 'express';
 import fs, { chownSync } from 'fs';
 import { pathToVevsFile, createRandomSuffix } from '../util';
+import { verifyToken } from './authMiddleware';
 import { Vev, User, VevDTO, UserDTO } from '../types';
-import { getUserIdFromAdminKey, isAdminKeyValid } from './authRouter';
 import { getUserFromUserId } from './peopleRouter';
-
 
 const vevRouter = Router();
 
@@ -52,14 +51,13 @@ vevRouter.get('/', (req, res) => {
     res.send(returnVevs);
 });
 
-vevRouter.post('/', (req: Request, res: any) => {
-    if (!isAdminKeyValid(req.body.adminKey)) {
-        return res.status(401).json({ error: 'Invalid adminKey' });
-    }
-
+vevRouter.post('/', verifyToken, (req: Request, res: any) => {
     const providedVev = req.body.newVev;
+    const user: User = req.user as User;
+
     if (Date.parse(providedVev.time) <= Date.now()) return res.status(400).send('Vev time must be in the future');
-    if (providedVev.challenger.id !== getUserIdFromAdminKey(req.body.adminKey)) return res.status(401).send('Unauthorized');
+
+    if (providedVev.challenger.id !== user.id) return res.status(401).send('User was trying to create a vev for another user');
 
     const newVev: Vev = {
         id: createRandomSuffix(),
@@ -75,8 +73,8 @@ vevRouter.post('/', (req: Request, res: any) => {
     return res.send(newVev);
 });
 
-vevRouter.put('/', (req: Request, res: any) => {
-    if (!isAdminKeyValid(req.body.adminKey)) return res.status(401).send('Unauthorized');
+vevRouter.put('/', verifyToken, (req: Request, res: any) => {
+    const user: User = req.user as User;
 
     const providedVev = req.body.vev;
     const providedWinnerId = req.body.winnerId;
@@ -85,7 +83,7 @@ vevRouter.put('/', (req: Request, res: any) => {
     const vevIndex = vevs.findIndex((vev: Vev) => vev.id === providedVev.id);
     if (vevIndex === -1) return res.status(404).send('Vev not found');
 
-    if (vevs[vevIndex].challengerId !== getUserIdFromAdminKey(req.body.adminKey)) return res.status(401).send('Unauthorized');
+    if (vevs[vevIndex].challengerId !== user.id) return res.status(401).send('Unauthorized');
 
     if (providedVev == null && providedWinnerId !== vevs[vevIndex].challengerId && providedWinnerId !== vevs[vevIndex].challengedId) return res.status(400).send('Winner must be either challenger, challenged or null');
 
@@ -94,8 +92,8 @@ vevRouter.put('/', (req: Request, res: any) => {
     return res.send(vevs[vevIndex]);
 });
 
-vevRouter.delete('/', (req: Request, res: any) => {
-    if (!isAdminKeyValid(req.body.adminKey)) return res.status(401).send('Unauthorized');
+vevRouter.delete('/', verifyToken, (req: Request, res: any) => {
+    const user: User = req.user as User;
 
     const providedVev = req.body.vev;
 
@@ -103,7 +101,7 @@ vevRouter.delete('/', (req: Request, res: any) => {
     const vevIndex = vevs.findIndex((vev: Vev) => vev.id === providedVev.id);
     if (vevIndex === -1) return res.status(404).send('Vev not found');
 
-    if (vevs[vevIndex].challenger.id !== getUserIdFromAdminKey(req.body.adminKey) || vevs[vevIndex].challenged.id !== getUserIdFromAdminKey(req.body.adminKey)) {
+    if (vevs[vevIndex].challenger.id !== user.id || vevs[vevIndex].challenged.id !== user.id) {
         return res.status(401).send('Unauthorized');
     }
 

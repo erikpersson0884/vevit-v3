@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { User } from '../types';
+
 
 interface PeopleContextType {
     allPeople: User[];
@@ -17,11 +17,20 @@ export const PeopleProvider: React.FC<PeopleProviderProps> = ({ children }) => {
     const [allPeople, setAllPeople] = React.useState<User[]>([]);
 
     React.useEffect(() => {
-        fetch(import.meta.env.VITE_API_URL + '/people/')
-                .then(res => res.json())
-                .then(data => {
-                        setAllPeople(data);
-        });
+
+        fetch('/api/people/')
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+            })
+            .then(data => {
+            setAllPeople(data);
+            })
+            .catch(error => {
+            console.error('Error fetching people:', error);
+            });
     }, []);
 
     return (

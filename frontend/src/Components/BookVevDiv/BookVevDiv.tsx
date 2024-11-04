@@ -2,7 +2,6 @@ import React from 'react';
 import './BookVevDiv.css';
 
 import { useAuth } from '../../Contexts/AuthenticationContext';
-
 import { User } from '../../types';
 
 interface BookVevDivProps {
@@ -10,22 +9,24 @@ interface BookVevDivProps {
     closeBookVevDiv: () => void;
 }
 
-const VITE_API_URL = import.meta.env.VITE_API_URL;
-
-
 const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) => {
-
     const { user } = useAuth();
-
     const [allUsers, setAllUsers] = React.useState<User[]>([]);
 
     React.useEffect(() => {
-        fetch(`${VITE_API_URL}/people/`
-        )
-        .then(response => response.json())
-        .then(data => {
-            setAllUsers(data);
-        })
+        fetch('/api/people/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setAllUsers(data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the users!', error);
+            });
     }, []);
 
     const [challanged , setChallanged] = React.useState<User | null>(null);
@@ -53,24 +54,24 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) =
             reason: reason
         }
 
-        fetch(`${VITE_API_URL}/vev/`, {
+        fetch('/api/vev/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
-                newVev: newVev
-            })
+            body: JSON.stringify({ newVev: newVev })
         })
         .then(response => {
             if (response.ok) {
-                // closeBookVevDiv();
                 window.location.reload();
             } else {
                 throw new Error('Network response was not ok');
             }
         })
+        .catch(error => {
+            console.error('There was an error booking the vev!', error);
+        });
     }
 
     return (

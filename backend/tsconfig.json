@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
+    "compilerOptions": {
 
-    "target": "es2016",
+        "target": "es2016",
 
-    "module": "commonjs",                                /* Specify what module code is generated. */
+        "module": "commonjs",                                /* Specify what module code is generated. */
 
-    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
-    "rootDir": "./src",                                   /* Specify the root folder within your source files. */
+        "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
+        "rootDir": "./src",                                   /* Specify the root folder within your source files. */
 
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
 
-    "strict": true,                                      /* Enable all strict type-checking options. */
+        "strict": true,                                      /* Enable all strict type-checking options. */
 
-    
-  }
+      
+    }
 }

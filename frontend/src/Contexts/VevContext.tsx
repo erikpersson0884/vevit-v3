@@ -1,6 +1,7 @@
 import React from 'react';
-
 import { Vev } from '../types';
+import axios from 'axios';
+
 
 interface VevContextType {
   allVevs: Vev[];
@@ -17,11 +18,14 @@ export const VevProvider: React.FC<VevProviderProps> = ({ children }) => {
   const [allVevs, setAllVevs] = React.useState<Vev[]>([]);
 
   React.useEffect(() => {
-    fetch(import.meta.env.VITE_API_URL + '/vev/')
-        .then(res => res.json())
-        .then(data => {
-            setAllVevs(data);
-    });
+
+    axios.get('/api/vev/')
+      .then(res => {
+        setAllVevs(res.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
   }, []);
 
   return (

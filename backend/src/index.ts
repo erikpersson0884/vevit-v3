@@ -5,9 +5,10 @@ import cors from 'cors';
 import { initiateDataFiles } from './util';
 initiateDataFiles();
 
+import peopleRouter from './routes/peopleRouter';
 import authRouter from './routes/authRouter'
 import vevRouter from './routes/vevRouter';
-import peopleRouter from './routes/peopleRouter';
+import {verifyToken} from './routes/authMiddleware';
 
 
 dotenv.config();
@@ -30,6 +31,11 @@ app.use('/api/auth/', authRouter)
 app.use('/api/vev/', vevRouter)
 app.use('/api/people/', peopleRouter)
 
+
+
+app.get('/protected', verifyToken, (req: Request, res: Response) => {
+    res.send('Protected route');
+});
 
 
 import path from 'path';

@@ -1,22 +1,15 @@
 import React from "react";
-
 import './AdminPage.css';
-
 import { useVevContext } from "../../Contexts/VevContext";
 import { usePeopleContext } from "../../Contexts/PeopleContext";
 import ToggleButton from "../ToggleButton/ToggleButton";
-
-
-const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 const AdminPage = () => {
     const [showUsers, setShowUsers] = React.useState(true);
 
     return (
         <div className="adminPage">
-            
             <ToggleButton className="" option1="Users" option2="Vev" initialOption="Users" toggleFunction={() => setShowUsers(!showUsers)} />
-            
             {showUsers ? 
                 <ManageUsers />
             :
@@ -28,51 +21,54 @@ const AdminPage = () => {
 
 export default AdminPage;
 
-
 const ManageUsers = () => {
     const allPeople = usePeopleContext().allPeople;
-    
 
     const resetPassword = (userId: string) => {
-        fetch(`${VITE_API_URL}/people/resetPassword`, {
+        fetch(`/api/people/resetPassword`, {
             method: 'PUT',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
-                userId: userId
-            })
-        })
-        .then (response => {
-            if (response.ok) {
-                alert('Password has been reset');
-            } else {
-                alert('Error resetting password');
-            }
-        });
-    }
-
-    function deleteUser(userId: string) {
-        fetch(`${VITE_API_URL}/people`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
                 userId: userId
             })
         })
         .then(response => {
-            if (response.ok) {
+            if (response.status === 200) {
+                alert('Password has been reset');
+            } else {
+                alert('Error resetting password');
+            }
+        })
+        .catch(() => {
+            alert('Error resetting password');
+        });
+    }
+
+    const deleteUser = (userId: string) => {
+        fetch(`/api/people`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId
+            })
+        })
+        .then(response => {
+            if (response.status === 200) {
                 alert('User has been deleted');
             } else {
                 alert('Error deleting user');
             }
+        })
+        .catch(() => {
+            alert('Error deleting user');
         });
     }
-
 
     return (
         <>
@@ -98,28 +94,30 @@ const ManageUsers = () => {
 const ManageVevs = () => {
     const allVevs = useVevContext().allVevs;
 
-    function deleteVev(event: React.MouseEvent<HTMLButtonElement>, vevId: string): void {
+    const deleteVev = (event: React.MouseEvent<HTMLButtonElement>, vevId: string): void => {
         event?.stopPropagation();
 
-        fetch(`${VITE_API_URL}/vev`, {
+        fetch(`/api/vev`, {
             method: 'DELETE',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                adminKey: localStorage.getItem('adminKey'),
                 vevId: vevId
             })
         })
         .then(response => {
-            if (response.ok) {
+            if (response.status === 200) {
                 alert('Vev has been deleted');
             } else {
                 alert('Error deleting vev');
             }
+        })
+        .catch(() => {
+            alert('Error deleting vev');
         });
     }
-
 
     return (
         <>
@@ -141,6 +139,5 @@ const ManageVevs = () => {
                 ))}
             </ul>
         </>
-
     )
 }
