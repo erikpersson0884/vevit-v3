@@ -3,7 +3,7 @@ export interface Vev {
     id: string;
     challenger: User;
     challenged: User;
-    time: string;
+    time: Date;
     reason: string;
     winner: User | null;
 }

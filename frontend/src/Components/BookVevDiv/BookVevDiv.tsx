@@ -43,7 +43,7 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) =
             return;
         }
 
-        const dateAndTime = new Date(date);
+        const dateAndTime: Date = new Date(date);
         dateAndTime.setHours(time.getHours());
         dateAndTime.setMinutes(time.getMinutes());
 

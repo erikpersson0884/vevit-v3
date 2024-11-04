@@ -1,20 +1,11 @@
 import Router, { Request, Response } from 'express';
-import fs from 'fs';
-import {createRandomSuffix, pathToCredentialsFile } from '../util';
+import {createRandomSuffix, getPeople, setPeople } from '../util';
 import { User } from '../types';
 import {verifyToken} from './authMiddleware';
 
 
 const peopleRouter = Router();
 
-const getPeople = () => {
-    let people = fs.readFileSync(pathToCredentialsFile, 'utf8');
-    return JSON.parse(people);
-}
-
-const setPeople = (people: User[]) => {
-    fs.writeFileSync(pathToCredentialsFile, JSON.stringify(people, null, 2));
-}
 
 export const getUserFromUserId = (userId: string): User => {
     const people: User[] = getPeople();
@@ -50,13 +41,16 @@ peopleRouter.post('/', verifyToken, (req: Request, res: Response) => { // Create
     let people = getPeople();
 
     if (!req.body.newUser.name || !req.body.newUser.password) { res.status(400).send('Missing name or password'); return; }
-    for (const person of people) { if (person.name === req.body.newUser.name) { res.status(409).send(`User with username ${person.username} already exists`); return;}}
+    for (const person of people) { 
+        if (person.name === req.body.newUser.name) { res.status(409).send(`User with username ${person.name} already exists`); return;}
+    }
 
     const newPerson: User = {
         id: createRandomSuffix(),
         name: req.body.newUser.name,
         password: req.body.newUser.password,
-        type: 'user'
+        type: 'user',
+        createdAt: new Date(),
     };
 
     people.push(newPerson);

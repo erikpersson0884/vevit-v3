@@ -9,22 +9,24 @@ export interface User {
     type?: "user" | "admin" | "deleted";
     name: string;
     password?: string;
+    createdAt: Date;
 }
 
 export interface Vev {
     id: string;
     challengerId: string;
     challengedId: string;
-    time: string;
+    time: Date;
     reason: string;
     winnerId?: string | null;
+    createdAt: Date;
 }
 
 export interface VevDTO {
     id: string;
     challenger: UserDTO | string;
     challenged: UserDTO | string;
-    time: string;
+    time: Date;
     reason: string;
     winner?: UserDTO | null;
 }

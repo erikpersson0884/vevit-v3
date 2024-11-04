@@ -2,6 +2,7 @@ import fs from "fs"
 
 import { User, Vev } from "./types";
 import dotenv from 'dotenv';
+import { DateTime } from 'luxon';
 
 
 dotenv.config();
@@ -70,7 +71,14 @@ export function getVevs(): Vev[] {
     return readFileToJson(pathToVevsFile);
 }
 
-export function getPeople(): User {
+export function setVevs(vevs: Vev[]): void {
+    writeJsonToFile(pathToVevsFile, vevs);
+}
+
+export function getPeople(): User[] {
     return readFileToJson(pathToCredentialsFile);
 }
 
+export function setPeople(people: User[]): void {
+    writeJsonToFile(pathToCredentialsFile, people);
+}

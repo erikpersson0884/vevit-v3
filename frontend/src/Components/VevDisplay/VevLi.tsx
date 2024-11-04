@@ -69,10 +69,10 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }
             </p>
             <div>
                 <p>
-                    {new Date(vev.time).toLocaleDateString([], { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                    {vev.time.toLocaleDateString([], { year: 'numeric', month: '2-digit', day: '2-digit' })}
                 </p>
                 <p>
-                    {new Date(vev.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {vev.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
             </div>
 

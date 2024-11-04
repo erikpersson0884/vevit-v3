@@ -19,9 +19,13 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction): vo
         const user: User = getUserFromUserId(decoded.id);    
         req.user = user;
         next();
-    } catch (error) {
-        console.error('Token verification error:', error); // Log the error
-        res.status(403).json({ message: 'Token is invalid or expired' });
-        return
+    } catch (error: any) {
+        if (error.name === 'TokenExpiredError') {
+            console.log('Token expired');
+            next();
+        } else {
+            console.error('Token verification error:', error);
+            res.status(403).json({ message: 'Token is invalid or expired' });
+        }
     }
 };

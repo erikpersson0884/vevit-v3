@@ -1,6 +1,5 @@
 import React from 'react';
 import { Vev } from '../types';
-import axios from 'axios';
 
 
 interface VevContextType {
@@ -19,12 +18,25 @@ export const VevProvider: React.FC<VevProviderProps> = ({ children }) => {
 
   React.useEffect(() => {
 
-    axios.get('/api/vev/')
-      .then(res => {
-        setAllVevs(res.data);
+    fetch('/api/vev/')
+      .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+      })
+      .then(data => {
+        const users = data.map((vev: Vev) => {
+          return {
+            ...vev,
+            time: new Date(vev.time),
+          };
+        });
+
+        setAllVevs(users);
       })
       .catch(error => {
-        console.error('Error fetching data:', error);
+      console.error('Error fetching data:', error);
       });
   }, []);
 

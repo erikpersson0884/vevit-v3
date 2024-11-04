@@ -1,20 +1,11 @@
 import Router, { Request, Response } from 'express';
-import fs, { chownSync } from 'fs';
-import { pathToVevsFile, createRandomSuffix } from '../util';
+import { createRandomSuffix, getVevs, setVevs } from '../util';
 import { verifyToken } from './authMiddleware';
 import { Vev, User, VevDTO, UserDTO } from '../types';
 import { getUserFromUserId } from './peopleRouter';
 
 const vevRouter = Router();
 
-function getVevs () {
-    let vevs = fs.readFileSync(pathToVevsFile, 'utf8');
-    return JSON.parse(vevs);
-}
-
-function setVevs (vevs: Vev[]) {
-    fs.writeFileSync(pathToVevsFile, JSON.stringify(vevs, null, 2));
-}
 
 function getVevFromId(id: string) {
     let vevs = getVevs();
@@ -65,6 +56,7 @@ vevRouter.post('/', verifyToken, (req: Request, res: any) => {
         challengedId: providedVev.challenged.id,
         time: providedVev.time,
         reason: providedVev.reason,
+        createdAt: new Date(),
     };
 
     let vevs = getVevs();
@@ -101,7 +93,7 @@ vevRouter.delete('/', verifyToken, (req: Request, res: any) => {
     const vevIndex = vevs.findIndex((vev: Vev) => vev.id === providedVev.id);
     if (vevIndex === -1) return res.status(404).send('Vev not found');
 
-    if (vevs[vevIndex].challenger.id !== user.id || vevs[vevIndex].challenged.id !== user.id) {
+    if (vevs[vevIndex].challengerId !== user.id || vevs[vevIndex].challengedId !== user.id) {
         return res.status(401).send('Unauthorized');
     }
 
