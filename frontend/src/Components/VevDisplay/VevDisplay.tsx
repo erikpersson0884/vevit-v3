@@ -43,8 +43,8 @@ const VevDisplay: React.FC = () => {
         <div className='vevDisplay'>
             <FilterDiv user={user} showAllVevs={showAllVevs} setShowAllVevs={setShowAllVevs} showPastVevs={showPastVevs} setShowPastVevs={setShowPastVevs} />
             
-            <div>
-                <div className='vev vevsHeader'>
+            <div className='table'>
+                <header className='tableElement'>
                     <h2>Utmanare</h2>
                     <a className='noAFormatting' href='https://dtek.se/'>
                         <h2>Utmanad</h2>   
@@ -52,13 +52,13 @@ const VevDisplay: React.FC = () => {
                     <h2>Tid</h2>
                     <h2>Anledning</h2>
                     {showPastVevs && !showAllVevs && <h2>Ställ in vinnare</h2>}
-                </div>
+                </header>
 
 
                 <div className='vevs'>
                     {filteredVevs.map((vev, index) => {
                         
-                        return <VevLi className={!(index % 2)? "coloredVev" : ""} key={index} vev={vev} showPastVevs={showPastVevs} showAllVevs={showAllVevs} />
+                        return <VevLi className={`vev tableElement ${!(index % 2)? "colored" : ""}`} key={index} vev={vev} showPastVevs={showPastVevs} showAllVevs={showAllVevs} />
                     })}
                 </div>
             </div>

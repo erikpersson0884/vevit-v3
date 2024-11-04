@@ -29,7 +29,7 @@ function App() {
                     <PeopleProvider>
                         <BrowserRouter >
                             <Header openBookVev={() => setShowBookVev(!showBookVev)} openLogin={() => setShowAuthenticationDiv(!showAuthenticationDiv)} />
-
+        
                             <AuthenticationDiv showAuthenticationDiv={showAuthenticationDiv} closeAuthenticationDiv={() => setShowAuthenticationDiv(false)} />
                             <BookVevDiv showBookVev={showBookVev} closeBookVevDiv={() =>setShowBookVev(false)} />
 

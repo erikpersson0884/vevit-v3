@@ -38,11 +38,11 @@ const StatsPage = () => {
     };
     
     return (
-        <ul className="statsPage noUlFormatting">
-            <li className="user">
+        <ul className="statsPage table noUlFormatting">
+            <header className="tableElement">
                 <h3 onClick={() => requestSort('user.name')}>
-                {sortConfig.key === 'user.name' && <SortArrow direction={sortConfig.direction} />}
-                Användare
+                    {sortConfig.key === 'user.name' && <SortArrow direction={sortConfig.direction} />}
+                    Användare
                 </h3>
                 <h3 onClick={() => requestSort('numberOfVevs')}>
                     {sortConfig.key === 'numberOfVevs' && <SortArrow direction={sortConfig.direction} />}
@@ -60,10 +60,10 @@ const StatsPage = () => {
                     {sortConfig.key === 'winPercentage' && <SortArrow direction={sortConfig.direction} />}
                     Vinstprocent
                 </h3>
-            </li>
-            {sortedPeopleStats.map((personStats: userStats, index: Key) => {
+            </header>
+            {sortedPeopleStats.map((personStats: userStats, index: number) => {
                 return (
-                    <li key={index} className="user">
+                    <li key={index} className={`tableElement ${index % 2 === 0 ? 'colored' : ''}`} >
                         <p>{personStats.user.name}</p>
                         <p>{personStats.numberOfVevs}</p>
                         <p>{personStats.numberOfVevsWon}</p>

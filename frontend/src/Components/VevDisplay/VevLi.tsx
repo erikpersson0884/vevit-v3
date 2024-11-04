@@ -52,7 +52,7 @@ const VevLi: React.FC<VevProps> = ({ vev, showPastVevs, showAllVevs, className }
     }
 
     return (
-        <div className={`${className} vev`}>
+        <div className={`${className}`}>
             <p>
                 {vev.challenger? vev.challenger.name : 'Deleted User'}
 

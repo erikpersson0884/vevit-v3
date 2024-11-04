@@ -7,9 +7,7 @@
     align-items: left;
     gap: 2rem;
 
-    min-width: 70%;
-    max-width: 100%;
-    margin-inline: 3rem;
+    max-width: 90%;
 }
 
 .filterDiv {
@@ -21,32 +19,6 @@
     gap: 2rem;
 }
 
-.vevs {
-    display: flex;
-    flex-direction: column;
-}
-
-.vevsHeader {
-    border-bottom: #fff 1px solid;
-}
-
-.vev h2 {
-    font-size: 2rem;
-    font-weight: 600;
-}
-
-.vev {
-    text-wrap: nowrap;
-    
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: top;
-    flex-wrap: wrap;
-    gap: 2rem;
-
-    padding: 1.5rem 1rem;
-}
 
 @media screen and (max-width: 800px) {
     .vevDisplay {
@@ -59,22 +31,8 @@
     
 }
 
-.vev>* {
-    text-align: left;
-    flex: 1;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: .5rem;
-}
-
 .vev img {
     height: 1.5rem;
-}
-
-.vev>*:last-of-type {
-    text-align: right;
 }
 
 .vev .vevTime {
@@ -94,9 +52,4 @@
 
 .updateVevButton {
     font-size: 1rem;
-}
-
-.coloredVev {
-    background-color: #353535;
-    background-color: #1a1a1a;
 }
