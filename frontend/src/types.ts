@@ -14,10 +14,10 @@ export interface User {
 }
 
 export interface userStats {
+    user: User;
+    
     numberOfVevs: number;
-    numberOfWins: number;
-    numberOfLosses: number;
-
-    timesChallangedOthers: number;
-    timesChallenged: number;
+    numberOfVevsWon: number;
+    numberOfVevsLost: number;
+    winPercentage?: number;
 }

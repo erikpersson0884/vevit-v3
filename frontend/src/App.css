@@ -9,7 +9,7 @@
     gap: 4rem;
 
     width: 100%;
-    min-height: 100vh;
+    min-height: 100vh;  
 }
 
 .popupWindow {
@@ -81,6 +81,13 @@
 
 .noUlFormatting {
     list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.noUlFormatting li {
+    display: inline;
+    
     padding: 0;
     margin: 0;
 }

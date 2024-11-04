@@ -2,6 +2,7 @@ import React from 'react';
 import './Header.css';
 
 import HeaderNavigation from './HeaderNavigation';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
     openBookVev: () => void;
@@ -11,7 +12,9 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({openBookVev, openLogin}) => {
     return (
         <header className="pageHeader">
-            <img className="logo" src="/images/vevit-white.png" alt="vevIT Logo" />
+            <Link to="/" className='noAFormatting'>
+                <img className="logo" src="/images/vevit-white.png" alt="vevIT Logo" />
+            </Link>
 
             <HeaderNavigation openBookVev={openBookVev} openLogin={openLogin}/>
         </header>
