@@ -26,7 +26,13 @@ export const PeopleProvider: React.FC<PeopleProviderProps> = ({ children }) => {
             return response.json();
             })
             .then(data => {
-            setAllPeople(data);
+                const people: User[] = data.map((person: User) => {
+                    return {
+                        ...person,
+                        createdAt: person.createdAt ? new Date(person.createdAt) : undefined,
+                    };
+                });
+            setAllPeople(people);
             })
             .catch(error => {
             console.error('Error fetching people:', error);

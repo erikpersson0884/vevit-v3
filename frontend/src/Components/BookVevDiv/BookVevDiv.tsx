@@ -43,6 +43,11 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) =
             return;
         }
 
+        if (challanged.id === user?.id) {
+            alert('Cannot challenge yourself');
+            return;
+        }
+
         const dateAndTime: Date = new Date(date);
         dateAndTime.setHours(time.getHours());
         dateAndTime.setMinutes(time.getMinutes());
@@ -97,8 +102,10 @@ const BookVevDiv: React.FC<BookVevDivProps> = ({showBookVev, closeBookVevDiv}) =
                     <label htmlFor="challenged">Utmana:</label>
                     <select onChange={(e) => setChallanged(allUsers.find(user => user.id === e.target.value) || null)}>
                         <option value={undefined}>Välj Motståndare</option>
-                        {allUsers.map(user => (
-                        <option key={user.id} value={user.id}>{user.name}</option>
+                        {allUsers
+                            .filter(u => u.id !== user?.id)
+                            .map(filteredUser => (
+                                <option key={filteredUser.id} value={filteredUser.id}>{filteredUser.name}</option>
                         ))}
                     </select>
                     </div>
